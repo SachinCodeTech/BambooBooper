@@ -1,0 +1,3126 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#071a0b;">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Bamboo Booper"/>
+<meta name="theme-color" content="#071a0b"/>
+
+<!-- SEO -->
+<title>Bamboo Booper – Panda Arcade Adventure Game</title>
+<meta name="description" content="Bamboo Booper is a fun panda arcade game where you collect bamboo, unlock achievements, complete daily challenges and challenge friends. Play instantly or install as a mobile PWA!"/>
+<meta name="keywords" content="panda game, bamboo game, snake game online, arcade panda game, browser game, mobile game PWA, bamboo booper, CodeTech"/>
+<meta name="author" content="CodeTech - Sachin Sheth"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://bamboo-booper.vercel.app/"/>
+
+<!-- Open Graph (WhatsApp / LinkedIn / Twitter previews) -->
+<meta property="og:type"        content="website"/>
+<meta property="og:title"       content="Bamboo Booper – Panda Arcade Adventure"/>
+<meta property="og:description" content="Guide the panda, collect bamboo, unlock achievements and challenge friends. Play instantly in your browser!"/>
+<meta property="og:image"       content="https://bamboo-booper.vercel.app/screenshot.png"/>
+<meta property="og:url"         content="https://bamboo-booper.vercel.app/"/>
+<meta property="og:site_name"   content="Bamboo Booper"/>
+<meta name="twitter:card"       content="summary_large_image"/>
+<meta name="twitter:title"      content="Bamboo Booper – Panda Arcade Adventure"/>
+<meta name="twitter:description" content="Play the bamboo panda arcade game — daily challenges, achievements, and friend challenges!"/>
+<meta name="twitter:image"      content="https://bamboo-booper.vercel.app/screenshot.png"/>
+
+<!-- Structured Data (Google rich results) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Bamboo Booper",
+  "alternateName": "Bamboo Booper – Panda Arcade Adventure",
+  "description": "Bamboo Booper is a panda arcade game where players collect bamboo, unlock achievements, complete daily challenges, and compete with friends.",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web Browser, Android (PWA)",
+  "genre": "Arcade",
+  "url": "https://bamboo-booper.vercel.app/",
+  "image": "https://bamboo-booper.vercel.app/screenshot.png",
+  "author": { "@type": "Person", "name": "Sachin Sheth" },
+  "publisher": { "@type": "Organization", "name": "CodeTech" },
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+}
+</script>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"/>
+<title>Bamboo Booper – Panda Arcade Adventure</title>
+<style>
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DESIGN TOKENS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+:root{
+  --bg-deep:#071a0b;
+  --bg-mid:#0e2d14;
+  --bg-light:#1a4624;
+  --bg-card:#122819;
+  --green:#3dba5e;
+  --green-light:#7eed9a;
+  --green-dark:#2d8f48;
+  --green-glow:rgba(61,186,94,.25);
+  --gold:#f7c948;
+  --gold-dark:#d4a017;
+  --gold-pale:rgba(247,201,72,.15);
+  --red:#e8434f;
+  --blue:#4fa3e8;
+  --purple:#9b72e8;
+  --orange:#f97316;
+  --white:#ffffff;
+  --text-dim:rgba(255,255,255,.55);
+  --text-bright:rgba(255,255,255,.92);
+  --card-bg:rgba(255,255,255,.06);
+  --card-bg2:rgba(61,186,94,.08);
+  --card-border:rgba(61,186,94,.18);
+  --card-border2:rgba(255,255,255,.08);
+  --radius-lg:24px;
+  --radius-md:16px;
+  --radius-sm:12px;
+  --shadow-green:0 8px 28px rgba(61,186,94,.4);
+  --shadow-card:0 4px 20px rgba(0,0,0,.5);
+  --transition:0.32s cubic-bezier(.4,0,.2,1);
+  /* FIXED footer height — add safe-area at bottom */
+  --footer-h:44px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   RESET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;width:100%;overflow:hidden;position:fixed;touch-action:none;overscroll-behavior:none}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg-deep);color:var(--white);
+}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;user-select:none}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SCREEN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.screen{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  padding-top:env(safe-area-inset-top,0);
+  /* Reserve space for persistent footer on non-game screens */
+  padding-bottom:calc(46px + env(safe-area-inset-bottom,0px));
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.28s cubic-bezier(.4,0,.2,1), transform 0.28s cubic-bezier(.4,0,.2,1);
+  will-change:opacity,transform;
+}
+.screen.active{opacity:1;transform:translateY(0);pointer-events:all}
+.screen.exit{opacity:0;transform:translateY(-16px)}
+/* Game screen gets its own footer treatment */
+#game-screen{padding-bottom:0}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PERSISTENT FOOTER  (always visible, single line, never clips)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#app-footer{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:8500;
+  /* height accounts for safe-area (navigation bar on Android) */
+  min-height:calc(46px + env(safe-area-inset-bottom,0px));
+  padding-top:0;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  padding-left:12px;
+  padding-right:8px;
+  background:rgba(0,0,0,0.35);
+  border-top:1px solid rgba(61,186,94,.18);
+  display:flex;
+  align-items:center;
+  gap:8px;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  /* hide on game-screen */
+  transition:opacity .25s ease, transform .25s ease;
+}
+#app-footer.hidden{
+  opacity:0;pointer-events:none;transform:translateY(100%);
+}
+/* Footer text — NEVER clips, shrinks font on tiny screens */
+.footer-text{
+  flex:1;
+  /* Base size visible on all phones; shrink on very small widths */
+  font-size:clamp(9px, 2.5vw, 11.5px);
+  color:rgba(255,255,255,.55);
+  white-space:nowrap;
+  /* NO overflow:hidden / text-overflow:ellipsis — full text must show */
+  letter-spacing:.15px;
+  line-height:46px;   /* vertically centre in the 46px content zone */
+}
+.footer-exit{
+  flex-shrink:0;
+  padding:7px 14px;
+  border-radius:18px;
+  background:rgba(120,30,30,.55);
+  border:1px solid rgba(220,60,60,.3);
+  color:rgba(255,160,160,.9);
+  /* same clamp so button text never wraps either */
+  font-size:clamp(10px, 2.8vw, 12px);
+  font-weight:700;
+  white-space:nowrap;
+  transition:background .15s;
+  line-height:1;
+}
+.footer-exit:active{background:rgba(160,40,40,.75)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SPLASH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#splash{
+  z-index:9999;
+  background:radial-gradient(ellipse at 50% 30%,#1a4624 0%,#071a0b 100%);
+  align-items:center;justify-content:center;gap:18px;
+  padding-bottom:0;/* splash ignores footer */
+  transition:opacity .5s ease;transform:none!important;
+}
+.splash-panda{font-size:100px;animation:splashPop .6s cubic-bezier(.34,1.56,.64,1) forwards,pandaFloat 2.2s 0.6s ease-in-out infinite}
+@keyframes splashPop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:scale(1)}}
+@keyframes pandaFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+.splash-title{font-size:28px;font-weight:900;letter-spacing:.5px;color:var(--green-light);text-shadow:0 0 40px rgba(126,237,154,.4)}
+.splash-sub{font-size:13px;color:var(--text-dim);letter-spacing:.5px}
+.splash-track{width:180px;height:5px;background:rgba(255,255,255,.12);border-radius:3px;overflow:hidden}
+.splash-fill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--green-light));border-radius:3px;animation:fillBar 1.7s ease-in-out forwards}
+@keyframes fillBar{0%{width:0}70%{width:82%}100%{width:100%}}
+.splash-by{font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.3px;white-space:nowrap}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DECORATIVE BG LEAVES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.leaf-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.leaf{position:absolute;font-size:40px;opacity:.07;animation:leafDrift linear infinite}
+@keyframes leafDrift{0%{transform:translateY(110vh) rotate(0deg)}100%{transform:translateY(-20vh) rotate(360deg)}}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MAIN MENU
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#menu{
+  background:radial-gradient(ellipse at 50% 0%,#1a4624 0%,#071a0b 80%);
+  overflow:hidden;
+}
+.menu-inner{
+  position:relative;z-index:1;
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:0 24px 12px;overflow-y:auto;
+}
+.menu-hero{text-align:center;padding:28px 0 20px}
+.menu-panda{font-size:82px;display:block;animation:pandaFloat 3s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(61,186,94,.3))}
+.menu-game-title{
+  font-size:34px;font-weight:900;line-height:1.1;
+  background:linear-gradient(135deg,var(--green-light),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-top:14px;
+}
+.menu-tagline{font-size:13px;color:var(--text-dim);margin-top:6px;letter-spacing:.4px}
+.menu-best{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(247,201,72,.12);border:1px solid rgba(247,201,72,.25);
+  border-radius:20px;padding:7px 20px;margin-top:12px;
+  font-size:15px;font-weight:700;color:var(--gold);
+}
+
+.menu-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px}
+.mbtn{
+  display:flex;align-items:center;gap:14px;
+  padding:0 20px;height:64px;border-radius:var(--radius-lg);
+  color:var(--white);font-size:16px;font-weight:800;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:transform .15s ease,box-shadow .15s ease;
+}
+.mbtn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .15s}
+.mbtn:active{transform:scale(.96);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.mbtn:active::after{background:rgba(255,255,255,.08)}
+.mbtn.play{background:linear-gradient(135deg,#3dba5e 0%,#2a8f44 100%);box-shadow:var(--shadow-green);height:76px;font-size:20px}
+.mbtn.settings{background:linear-gradient(135deg,#4fa3e8,#2976c4)}
+.mbtn.about{background:linear-gradient(135deg,#9b72e8,#6d42cc)}
+.mbtn.policy{background:linear-gradient(135deg,#e87c4f,#c4531e)}
+.mbtn .ico{font-size:26px;flex-shrink:0}
+.mbtn .lbl{text-align:left;line-height:1.2}
+.mbtn .lbl small{display:block;font-size:12px;font-weight:500;opacity:.75;margin-top:2px}
+.mbtn .arr{margin-left:auto;opacity:.5;font-size:20px}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SUB-SCREEN SHELL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.sub-screen{background:linear-gradient(180deg,#0e2d14 0%,#071a0b 100%)}
+.sub-screen .sub-body{
+  opacity:0;transition:opacity .2s ease .1s;
+}
+.sub-screen.active .sub-body{opacity:1}
+.sub-bar{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;flex-shrink:0;
+  background:rgba(0,0,0,.25);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--card-border);
+}
+.back-btn{
+  width:40px;height:40px;border-radius:12px;
+  background:var(--card-bg);color:var(--white);font-size:19px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s;
+}
+.back-btn:active{background:rgba(255,255,255,.15)}
+.sub-bar h2{font-size:19px;font-weight:800;flex:1}
+.sub-body{flex:1;overflow-y:auto;padding:20px 16px;-webkit-overflow-scrolling:touch}
+
+.card{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:var(--radius-lg);padding:20px;margin-bottom:14px;
+}
+.card h3{font-size:14px;font-weight:800;color:var(--green-light);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.6px}
+.card p,.card li{font-size:14px;color:rgba(255,255,255,.72);line-height:1.7}
+.card ul{padding-left:18px}
+.card ul li{margin-bottom:4px}
+
+/* settings rows */
+.srow{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--card-border);
+}
+.srow:last-child{border-bottom:none;padding-bottom:0}
+.srow-info{display:flex;flex-direction:column;gap:3px}
+.srow-label{font-size:15px;font-weight:700}
+.srow-sub{font-size:12px;color:var(--text-dim)}
+
+/* toggle switch */
+.toggle{position:relative;width:50px;height:28px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.tog-track{
+  position:absolute;inset:0;border-radius:14px;
+  background:#333;transition:background .25s;cursor:pointer;
+}
+.toggle input:checked+.tog-track{background:var(--green)}
+.tog-track::after{
+  content:'';position:absolute;top:3px;left:3px;
+  width:22px;height:22px;border-radius:50%;
+  background:#fff;transition:transform .25s;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.toggle input:checked+.tog-track::after{transform:translateX(22px)}
+
+/* danger button */
+.danger-btn{
+  width:100%;padding:14px;border-radius:var(--radius-md);
+  background:rgba(180,130,0,.15);border:1px solid rgba(210,160,20,.35);
+  color:#c8980a;font-size:14px;font-weight:700;
+  transition:background .15s;
+}
+.danger-btn:active{background:rgba(180,130,0,.28)}
+
+/* about hero */
+.about-hero{
+  text-align:center;
+  background:linear-gradient(135deg,var(--bg-light),var(--bg-mid));
+  border:1px solid var(--card-border);border-radius:var(--radius-lg);
+  padding:28px 20px;margin-bottom:14px;
+}
+.about-hero .big-panda{font-size:64px;margin-bottom:12px}
+.about-hero h2{font-size:22px;font-weight:900;color:var(--green-light)}
+.about-hero p{font-size:13px;color:var(--text-dim);margin-top:4px}
+.badge{display:inline-block;background:rgba(61,186,94,.15);color:var(--green-light);
+  border:1px solid rgba(61,186,94,.3);border-radius:20px;
+  padding:4px 13px;font-size:12px;font-weight:700;margin:3px}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   WELCOME NAME OVERLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#welcome{
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+  z-index:500;align-items:center;justify-content:center;
+}
+.wcard{
+  background:linear-gradient(160deg,var(--bg-light),var(--bg-mid));
+  border:1px solid var(--card-border);border-radius:28px;
+  padding:36px 28px;width:min(340px,90vw);text-align:center;
+  animation:popIn .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn{from{transform:scale(.82) translateY(12px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.wcard .big-panda{font-size:72px;animation:pandaFloat 2s ease-in-out infinite;margin-bottom:16px}
+.wcard h2{font-size:22px;font-weight:900;color:var(--green-light);margin-bottom:6px}
+.wcard p{font-size:14px;color:var(--text-dim);margin-bottom:20px}
+.name-input{
+  width:100%;padding:14px 18px;border-radius:var(--radius-md);
+  border:2px solid var(--card-border);background:rgba(255,255,255,.08);
+  color:var(--white);font-size:16px;font-weight:600;text-align:center;
+  outline:none;transition:border-color .2s;
+}
+.name-input::placeholder{color:rgba(255,255,255,.3)}
+.name-input:focus{border-color:var(--green)}
+.name-input.err{border-color:var(--red);animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.go-btn{
+  width:100%;margin-top:14px;padding:16px;border-radius:var(--radius-lg);
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:#fff;font-size:17px;font-weight:800;
+  box-shadow:var(--shadow-green);transition:transform .15s,box-shadow .15s;
+}
+.go-btn:active{transform:scale(.97);box-shadow:0 3px 10px rgba(61,186,94,.3)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   GAME SCREEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#game-screen{background:radial-gradient(ellipse at 50% 0%,#163d1e 0%,#071a0b 100%)}
+
+.game-hud{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 12px;
+  background:rgba(0,0,0,.35);backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(61,186,94,.15);
+  flex-shrink:0;
+}
+.hud-left{display:flex;align-items:center;gap:8px}
+.hud-menu-btn{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--card-bg);color:var(--white);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+}
+.hud-title{font-size:15px;font-weight:800;color:var(--green-light)}
+.hud-level{
+  background:linear-gradient(135deg,var(--blue),#2976c4);
+  color:#fff;padding:5px 14px;border-radius:12px;font-size:13px;font-weight:800;
+}
+
+/* ── IMPROVED SCORE BAR ── */
+.hud-stats{
+  display:flex;justify-content:space-around;align-items:center;
+  padding:6px 8px;background:rgba(0,0,0,.2);flex-shrink:0;
+  gap:4px;
+}
+.hud-stat{
+  display:flex;flex-direction:column;align-items:center;
+  background:rgba(255,255,255,.04);border-radius:10px;
+  padding:5px 8px;flex:1;
+}
+.hud-stat .val{
+  font-size:19px;font-weight:900;color:var(--green-light);
+  line-height:1.1;
+}
+.hud-stat.gold-stat .val{color:var(--gold)}
+.hud-stat .lbl{
+  font-size:9px;color:var(--text-dim);font-weight:700;
+  text-transform:uppercase;letter-spacing:.4px;margin-top:2px;
+}
+/* Combo stat — hide label text, show icon only */
+.hud-stat.combo-stat .val{font-size:17px}
+
+.canvas-zone{
+  flex:1;min-height:0;display:flex;
+  align-items:center;justify-content:center;
+  padding:6px;position:relative;
+}
+.canvas-wrap{
+  position:relative;
+  width:min(92vw, calc(100dvh - 330px));
+  aspect-ratio:1;
+}
+canvas{
+  width:100%;height:100%;display:block;
+  border:2px solid rgba(61,186,94,.45);border-radius:16px;
+  background:#071a0b;
+  box-shadow:0 0 50px rgba(61,186,94,.15),0 8px 32px rgba(0,0,0,.6),inset 0 0 60px rgba(0,0,0,.3);
+}
+.steps-bar{
+  text-align:center;padding:4px 0;flex-shrink:0;
+  font-size:12px;font-weight:700;color:var(--green-light);
+  letter-spacing:.3px;background:rgba(0,0,0,.15);
+}
+
+/* D-pad */
+.ctrl-dock{
+  padding:8px;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.3);border-top:1px solid rgba(61,186,94,.1);
+  flex-shrink:0;
+}
+.dpad{display:grid;grid-template-columns:repeat(3,58px);grid-template-rows:58px 6px 58px;gap:8px;
+  justify-items:center;align-items:center}
+.dir{
+  width:58px;height:58px;border-radius:50%;font-size:22px;
+  background:radial-gradient(circle at 40% 35%,rgba(61,186,94,.5),rgba(29,90,43,.7));
+  border:1.5px solid rgba(61,186,94,.35);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .1s,opacity .1s;
+}
+.dir:active{transform:scale(.86);opacity:.75;box-shadow:0 0 12px rgba(61,186,94,.5)}
+#du{grid-column:2;grid-row:1}#dl{grid-column:1;grid-row:3}
+#dd{grid-column:2;grid-row:3}#dr{grid-column:3;grid-row:3}
+
+/* action bar */
+.act-bar{
+  display:flex;gap:8px;padding:8px 12px;
+  background:rgba(0,0,0,.25);border-top:1px solid rgba(255,255,255,.05);
+  flex-shrink:0;
+  /* Account for safe-area at bottom since game-screen has no footer */
+  padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));
+}
+.act-btn{
+  flex:1;height:46px;border-radius:23px;font-size:14px;font-weight:800;color:#fff;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 3px 10px rgba(0,0,0,.25);transition:transform .12s;
+}
+.act-btn:active{transform:scale(.93);filter:brightness(.92)}
+#btn-pause{background:linear-gradient(135deg,#f7a444,#c97d1c)}
+#btn-start{background:linear-gradient(135deg,#e8434f,#b02030)}
+#btn-speed{background:linear-gradient(135deg,#9b72e8,#6d42cc)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MODAL OVERLAYS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.modal-bg{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(3px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  /* top padding respects status bar, bottom respects nav bar */
+  padding:calc(12px + env(safe-area-inset-top,0px)) 12px
+          calc(40px + env(safe-area-inset-bottom,0px));
+  opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+.modal-bg.open{opacity:1;pointer-events:all}
+.modal{
+  background:linear-gradient(160deg,#1a4624,#0e2d14);
+  border:1px solid rgba(61,186,94,.25);border-radius:28px;
+  padding:24px 20px;
+  /* use full available width on small screens */
+  width:min(400px,96vw);
+  text-align:center;
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 0 1px rgba(61,186,94,.1);
+  /* always render inside scroll container, never clip */
+  flex-shrink:0;
+  margin:auto 0;
+}
+.modal-emoji{font-size:64px;margin-bottom:12px}
+.modal h2{font-size:26px;font-weight:900;margin-bottom:6px}
+.modal .modal-sub{font-size:14px;color:var(--text-dim);margin-bottom:18px}
+
+/* ── IMPROVED SCORE GRID ── */
+.score-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;
+}
+.score-cell{
+  background:rgba(0,0,0,.4);border-radius:var(--radius-md);padding:16px 8px;
+  border:1px solid rgba(61,186,94,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 8px rgba(0,0,0,.3);
+}
+.score-cell .sc-val{
+  font-size:32px;font-weight:900;color:var(--green-light);
+  line-height:1;
+}
+.score-cell.gold .sc-val{color:var(--gold)}
+.score-cell .sc-lbl{
+  font-size:12px;color:var(--text-dim);margin-top:5px;
+  text-transform:uppercase;letter-spacing:.5px;font-weight:700;
+}
+.player-tag{
+  background:rgba(247,201,72,.1);border:1px solid rgba(247,201,72,.25);
+  border-radius:var(--radius-md);padding:11px 16px;margin:10px 0;
+  font-size:17px;font-weight:800;color:var(--gold);
+}
+
+/* modal buttons */
+.modal-btns{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.mmbtn{
+  width:100%;padding:16px;border-radius:var(--radius-lg);
+  font-size:16px;font-weight:800;color:#fff;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);transition:transform .12s;
+}
+.mmbtn:active{transform:scale(.96)}
+.mmbtn.primary{background:linear-gradient(135deg,var(--green),var(--green-dark));box-shadow:var(--shadow-green)}
+.mmbtn.secondary{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);font-size:14px;padding:14px}
+.mmbtn.blue{background:linear-gradient(135deg,var(--blue),#2976c4)}
+.mmbtn.danger{background:linear-gradient(135deg,var(--red),#a01825)}
+.mmbtn.orange{background:linear-gradient(135deg,#f97316,#c2410c)}
+.mmbtn.to-menu-btn{
+  background:rgba(60,30,10,.5);border:1px solid rgba(180,100,40,.3);
+  color:rgba(255,180,100,.9);font-size:14px;padding:14px;
+}
+.mmbtn.to-menu-btn:active{background:rgba(90,45,10,.6)}
+
+/* new-best ribbon */
+.new-best{
+  background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:#1a1a1a;border-radius:12px;padding:10px 16px;margin:8px 0;
+  font-size:15px;font-weight:900;animation:pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+/* level-up ribbon */
+.lvlup{color:var(--green-light);font-size:18px;font-weight:900;animation:pulse 1s ease-in-out infinite;margin:8px 0}
+
+/* unlock notification */
+.unlock-card{
+  background:rgba(247,201,72,.12);border:1px solid rgba(247,201,72,.3);
+  border-radius:var(--radius-md);padding:12px 16px;margin:8px 0;
+}
+
+/* skins */
+.skin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;width:100%}
+.skin-opt{
+  border-radius:16px;padding:12px 8px 8px;
+  background:linear-gradient(160deg,rgba(61,186,94,.12),rgba(255,255,255,.04));
+  border:1.5px solid rgba(61,186,94,.15);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  cursor:pointer;transition:all .2s;position:relative;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.skin-opt::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);pointer-events:none}
+.skin-opt.sel{
+  border-color:var(--green);
+  background:linear-gradient(160deg,rgba(61,186,94,.28),rgba(61,186,94,.08));
+  transform:scale(1.05);
+  box-shadow:0 4px 18px rgba(61,186,94,.35);
+}
+.skin-opt.sel::after{content:'✓';position:absolute;top:5px;right:7px;font-size:11px;color:var(--green-light);font-weight:900}
+.skin-opt.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.5)}
+.skin-opt .skin-emoji{font-size:32px;line-height:1}
+.skin-opt .sname{font-size:11px;color:rgba(255,255,255,.85);font-weight:700;letter-spacing:.2px}
+.skin-opt .slv{font-size:10px;color:var(--gold);font-weight:600}
+.skin-opt.locked .slv{color:rgba(255,255,255,.35)}
+.skin-opt .lock{font-size:14px;margin-bottom:2px}
+
+/* confetti */
+.conf-piece{position:fixed;width:9px;height:9px;pointer-events:none;
+  animation:confFall 2.8s linear forwards;z-index:999}
+@keyframes confFall{to{transform:translateY(110vh) rotate(540deg);opacity:0}}
+
+/* ── Pause modal — keep game visible behind ── */
+#pause-modal{background:rgba(0,0,0,.30);backdrop-filter:none}
+#pause-modal .modal{background:linear-gradient(160deg,rgba(20,60,30,.96),rgba(10,35,16,.94));border:2px solid rgba(61,186,94,.45)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   COUNTDOWN OVERLAY  — hidden, drawing done on canvas
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#countdown-overlay{
+  display:none !important; /* Not used — countdown drawn on canvas */
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   TOAST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#toast{
+  position:fixed;top:80px;left:50%;
+  transform:translateX(-50%) translateY(-120px);
+  background:#222;color:#fff;padding:10px 22px;border-radius:24px;
+  font-size:13px;font-weight:700;z-index:9000;white-space:nowrap;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);transition:transform .3s ease;pointer-events:none;
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+#toast.ok{background:linear-gradient(135deg,var(--green),var(--green-dark))}
+#toast.bad{background:linear-gradient(135deg,var(--red),#a01825)}
+#toast.info{background:linear-gradient(135deg,var(--blue),#2976c4)}
+
+/* ── Install button ── */
+.mbtn.install{
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  box-shadow:0 6px 20px rgba(245,158,11,.35);
+  border:1.5px solid rgba(255,210,80,.3);
+  display:none;
+}
+.mbtn.install.visible{ display:flex; }
+.install-pulse{
+  position:absolute;top:8px;right:14px;
+  width:10px;height:10px;border-radius:50%;
+  background:#fff;opacity:.9;
+  animation:installBlink 1.4s ease-in-out infinite;
+}
+@keyframes installBlink{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.5);opacity:.4}}
+
+/* ── Install modal ── */
+#install-modal{
+  position:fixed;inset:0;z-index:9100;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;
+  transition:opacity .25s ease;
+}
+#install-modal.open{opacity:1;pointer-events:all}
+.imod-card{
+  background:linear-gradient(160deg,#1a4624,#0e2d14);
+  border:1.5px solid rgba(61,186,94,.3);border-radius:28px;
+  padding:32px 24px;width:min(340px,92vw);text-align:center;
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 40px rgba(0,0,0,.7);
+}
+.imod-icon{font-size:64px;margin-bottom:12px}
+.imod-title{font-size:20px;font-weight:900;color:var(--green-light);margin-bottom:8px}
+.imod-msg{font-size:14px;color:rgba(255,255,255,.75);line-height:1.6;margin-bottom:20px}
+.imod-steps{
+  background:rgba(0,0,0,.3);border-radius:14px;
+  padding:14px 16px;margin-bottom:20px;text-align:left;
+}
+.imod-steps li{font-size:13px;color:rgba(255,255,255,.8);line-height:1.7;list-style:none;
+  padding-left:20px;position:relative;}
+.imod-steps li::before{content:'›';position:absolute;left:4px;color:var(--green-light);font-weight:900}
+.imod-close{
+  width:100%;padding:14px;border-radius:22px;
+  background:linear-gradient(135deg,var(--green),var(--green-dark));
+  color:#fff;font-size:15px;font-weight:800;border:none;cursor:pointer;
+  box-shadow:var(--shadow-green);
+}
+.imod-close:active{transform:scale(.97)}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   PWA INSTALL BANNER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#install-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:8000;
+  background:linear-gradient(135deg,#0d2b12,#1a4a25);
+  color:#fff;display:flex;align-items:center;gap:12px;
+  padding:14px 16px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -4px 24px rgba(0,0,0,.5);
+  transform:translateY(110%);transition:transform .4s cubic-bezier(.34,1.4,.64,1);
+  border-top:1px solid rgba(61,186,94,.2);
+}
+#install-bar.show{transform:translateY(0)}
+#install-bar .ib-icon{font-size:36px;flex-shrink:0}
+#install-bar .ib-text{flex:1}
+#install-bar .ib-text strong{display:block;font-size:14px;font-weight:800}
+#install-bar .ib-text small{font-size:11px;color:rgba(255,255,255,.65)}
+#install-bar .ib-btns{display:flex;flex-direction:column;gap:6px}
+#btn-install{background:var(--green);color:#fff;border:none;border-radius:18px;padding:8px 16px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+#btn-dismiss{background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:5px 16px;font-size:11px;cursor:pointer}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MICRO-FEEDBACK UI — neon glow + scale on every tap
+   (Suggestion 1: "Micro-Feedback UI" for premium feel)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+button{
+  transition:transform .1s ease, box-shadow .18s ease;
+}
+button:active{
+  transform:scale(0.95);
+  box-shadow:0 0 14px rgba(76,255,106,.55), 0 0 4px rgba(76,255,106,.3) !important;
+  transition:transform 0.08s ease, box-shadow 0.08s ease;
+}
+/* Larger buttons keep their specific shadows but also get the glow */
+.mbtn:active{
+  transform:scale(0.95) !important;
+  box-shadow:0 0 18px rgba(76,255,106,.5), 0 2px 8px rgba(0,0,0,.3) !important;
+}
+.mmbtn:active{
+  transform:scale(0.95) !important;
+  box-shadow:0 0 14px rgba(76,255,106,.45) !important;
+}
+.dir:active{
+  transform:scale(.86) !important;
+  opacity:.75;
+  box-shadow:0 0 18px rgba(61,186,94,.8) !important;
+}
+.act-btn:active{
+  transform:scale(0.93) !important;
+  box-shadow:0 0 14px rgba(76,255,106,.4) !important;
+}
+.go-btn:active{
+  transform:scale(.97) !important;
+  box-shadow:0 0 16px rgba(61,186,94,.6) !important;
+}
+.footer-exit:active{
+  background:rgba(160,40,40,.75);
+  box-shadow:0 0 10px rgba(255,80,80,.4) !important;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   BAMBOO FLASH — canvas-side glow on eat (CSS helper)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@keyframes bambooFlash{
+  0%  { filter:brightness(1) drop-shadow(0 0 0px #4cff6a); }
+  40% { filter:brightness(2.2) drop-shadow(0 0 12px #4cff6a); }
+  100%{ filter:brightness(1) drop-shadow(0 0 0px #4cff6a); }
+}
+.bamboo-hit{ animation:bambooFlash .28s ease; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LEVEL-UP CANVAS BANNER (drawn on canvas, CSS fallback)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#lvlup-banner{
+  position:fixed;
+  top:38%;left:50%;
+  transform:translate(-50%,-50%) scale(0.6);
+  font-size:clamp(20px,5vw,30px);
+  font-weight:900;
+  color:#4cff6a;
+  text-shadow:0 0 18px #4cff6a, 0 0 40px rgba(76,255,106,.4);
+  letter-spacing:.04em;
+  text-align:center;
+  pointer-events:none;
+  z-index:7000;
+  opacity:0;
+  transition:opacity .18s ease, transform .18s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;
+}
+#lvlup-banner.show{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+#lvlup-banner .lvl-sub{
+  display:block;
+  font-size:clamp(11px,2.8vw,15px);
+  color:rgba(126,237,154,.85);
+  font-weight:700;
+  text-shadow:none;
+  margin-top:4px;
+  letter-spacing:.08em;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MENU ANIMATION — fadeUp on load (Suggestion: menu polish)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@keyframes fadeUp{
+  from{ transform:translateY(22px); opacity:0; }
+  to  { transform:translateY(0);    opacity:1; }
+}
+.menu-hero    { animation:fadeUp .45s cubic-bezier(.4,0,.2,1) both; }
+.menu-btns    { animation:fadeUp .55s cubic-bezier(.4,0,.2,1) .08s both; }
+.menu-btns .mbtn:nth-child(1){ animation-delay:.05s; }
+.menu-btns .mbtn:nth-child(2){ animation-delay:.10s; }
+.menu-btns .mbtn:nth-child(3){ animation-delay:.15s; }
+.menu-btns .mbtn:nth-child(4){ animation-delay:.20s; }
+.menu-btns .mbtn:nth-child(5){ animation-delay:.25s; }
+.menu-btns .mbtn{ animation:fadeUp .45s cubic-bezier(.4,0,.2,1) both; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ANDROID RIPPLE on buttons (Suggestion: premium tap feel)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.mbtn, .mmbtn, .act-btn, .go-btn, .dir, .back-btn, .footer-exit{
+  position:relative;
+  overflow:hidden;
+}
+.mbtn::before, .mmbtn::before, .act-btn::before,
+.go-btn::before, .dir::before, .back-btn::before{
+  content:'';
+  position:absolute;
+  width:120px; height:120px;
+  background:rgba(255,255,255,.22);
+  border-radius:50%;
+  transform:scale(0) translate(-50%,-50%);
+  transform-origin:0 0;
+  opacity:0;
+  top:50%; left:50%;
+  pointer-events:none;
+  transition:none;
+}
+.mbtn:active::before, .mmbtn:active::before, .act-btn:active::before,
+.go-btn:active::before, .dir:active::before, .back-btn:active::before{
+  transform:scale(2.5) translate(-50%,-50%);
+  opacity:1;
+  transition:transform .35s ease, opacity .35s ease;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   LEADERBOARD SCREEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#leaderboard{ background:linear-gradient(180deg,#0e2d14 0%,#071a0b 100%); }
+.lb-list{ list-style:none; padding:0; margin:0; }
+.lb-row{
+  display:flex; align-items:center; gap:12px;
+  padding:13px 16px; margin-bottom:8px;
+  background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  animation:fadeUp .3s ease both;
+}
+.lb-row.top1{ background:rgba(247,201,72,.12); border-color:rgba(247,201,72,.35); }
+.lb-row.top2{ background:rgba(200,200,220,.07); border-color:rgba(200,200,220,.2); }
+.lb-row.top3{ background:rgba(205,127,50,.08);  border-color:rgba(205,127,50,.25); }
+.lb-rank{ font-size:22px; min-width:32px; text-align:center; flex-shrink:0; }
+.lb-info{ flex:1; }
+.lb-name{ font-size:15px; font-weight:800; color:var(--white); }
+.lb-meta{ font-size:11px; color:var(--text-dim); margin-top:2px; }
+.lb-score{ font-size:24px; font-weight:900; color:var(--green-light); }
+.lb-row.top1 .lb-score{ color:var(--gold); }
+.lb-empty{ text-align:center; padding:40px 20px; color:var(--text-dim); font-size:14px; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   ACHIEVEMENTS SCREEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#achievements{ background:linear-gradient(180deg,#0e2d14 0%,#071a0b 100%); }
+.ach-grid{ display:flex; flex-direction:column; gap:10px; }
+.ach-item{
+  display:flex; align-items:center; gap:14px;
+  padding:14px 16px;
+  background:var(--card-bg); border:1px solid var(--card-border);
+  border-radius:var(--radius-md);
+  transition:border-color .2s, background .2s;
+  animation:fadeUp .3s ease both;
+}
+.ach-item.unlocked{
+  background:rgba(61,186,94,.1); border-color:rgba(61,186,94,.35);
+}
+.ach-icon{ font-size:32px; flex-shrink:0; }
+.ach-item.locked .ach-icon{ filter:grayscale(1); opacity:.4; }
+.ach-body{ flex:1; }
+.ach-name{ font-size:15px; font-weight:800; color:var(--white); }
+.ach-item.locked .ach-name{ color:var(--text-dim); }
+.ach-desc{ font-size:12px; color:var(--text-dim); margin-top:2px; }
+.ach-badge{
+  font-size:11px; font-weight:700;
+  padding:4px 10px; border-radius:12px;
+  background:rgba(61,186,94,.2); color:var(--green-light);
+  border:1px solid rgba(61,186,94,.3); flex-shrink:0;
+}
+.ach-item.locked .ach-badge{
+  background:rgba(255,255,255,.06); color:var(--text-dim);
+  border-color:rgba(255,255,255,.1);
+}
+/* Achievement unlock toast */
+/* Achievement toast — positioned at TOP so it never covers the game board (Bug Fix) */
+#ach-toast{
+  position:fixed;
+  top:calc(20px + env(safe-area-inset-top,0px));
+  left:50%;
+  transform:translateX(-50%) translateY(-80px);
+  background:linear-gradient(135deg,#1a4624,#0e2d14);
+  border:1.5px solid rgba(61,186,94,.4);
+  color:#fff; padding:12px 20px; border-radius:20px;
+  font-size:13px; font-weight:700; z-index:9800;
+  white-space:nowrap; opacity:0; pointer-events:none;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  transition:opacity .3s ease, transform .3s ease;
+}
+#ach-toast.show{
+  opacity:1; transform:translateX(-50%) translateY(0);
+}
+
+/* Screen shake (haptic visual feedback on game-over / big events) */
+@keyframes screenShake{
+  0%  { transform:translate(0,0); }
+  20% { transform:translate(-4px,2px); }
+  40% { transform:translate(4px,-2px); }
+  60% { transform:translate(-3px,1px); }
+  80% { transform:translate(2px,-1px); }
+  100%{ transform:translate(0,0); }
+}
+#game-screen.shake{ animation:screenShake .25s ease; }
+
+/* Score grid responsive fix — single column on very small screens */
+@media(max-width:360px){
+  .score-grid{ grid-template-columns:1fr; }
+  .score-cell .sc-val{ font-size:26px; }
+}
+
+@media (display-mode: standalone) {
+  body::before{display:none}
+  #install-bar{display:none!important}
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   DAILY CHALLENGE CARD (main menu)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+#daily-challenge-card{
+  width:100%;max-width:340px;
+  background:linear-gradient(135deg,rgba(61,186,94,.18),rgba(247,201,72,.08));
+  border:1.5px solid rgba(61,186,94,.35);border-radius:var(--radius-lg);
+  padding:14px 18px;display:flex;align-items:center;gap:14px;
+  margin-bottom:4px;animation:fadeUp .4s cubic-bezier(.4,0,.2,1) both;
+  position:relative;overflow:hidden;
+}
+#daily-challenge-card.completed{
+  background:linear-gradient(135deg,rgba(247,201,72,.18),rgba(61,186,94,.1));
+  border-color:rgba(247,201,72,.5);
+}
+.dc-icon{ font-size:28px;flex-shrink:0; }
+.dc-body{ flex:1; }
+.dc-title{ font-size:12px;font-weight:800;color:var(--green-light);
+  text-transform:uppercase;letter-spacing:.6px; }
+#daily-challenge-card.completed .dc-title{ color:var(--gold); }
+.dc-goal{ font-size:15px;font-weight:700;color:var(--white);margin-top:2px; }
+.dc-sub{ font-size:11px;color:var(--text-dim);margin-top:2px; }
+.dc-progress{ width:100%;height:5px;background:rgba(255,255,255,.12);
+  border-radius:3px;overflow:hidden;margin-top:8px; }
+.dc-progress-fill{ height:100%;
+  background:linear-gradient(90deg,var(--green),var(--green-light));
+  border-radius:3px;transition:width .4s ease;width:0%; }
+#daily-challenge-card.completed .dc-progress-fill{
+  background:linear-gradient(90deg,var(--gold),#ffe07a);width:100%; }
+
+/* ── Challenge complete in-game banner ── */
+#dc-banner{
+  position:fixed;top:22%;left:50%;
+  transform:translate(-50%,-50%) scale(0.7);
+  background:linear-gradient(135deg,#1a4624,#0e2d14);
+  border:2px solid rgba(61,186,94,.5);border-radius:22px;
+  padding:16px 28px;text-align:center;z-index:8000;
+  pointer-events:none;opacity:0;white-space:nowrap;
+  transition:opacity .25s ease,transform .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+}
+#dc-banner.show{ opacity:1;transform:translate(-50%,-50%) scale(1); }
+.dc-banner-emoji{ font-size:36px;display:block;margin-bottom:6px; }
+.dc-banner-title{ font-size:18px;font-weight:900;color:var(--green-light);
+  text-shadow:0 0 16px rgba(76,255,106,.4); }
+.dc-banner-sub{ font-size:12px;color:rgba(255,255,255,.7);margin-top:4px; }
+
+/* ── Challenge link bar (shown when opened via share link) ── */
+#challenge-link-bar{
+  position:fixed;top:0;left:0;right:0;z-index:9200;
+  background:linear-gradient(135deg,#1a4624,#071a0b);
+  border-bottom:2px solid rgba(61,186,94,.4);
+  padding:10px 16px;text-align:center;
+  font-size:13px;font-weight:700;color:#fff;
+  display:none;animation:fadeUp .3s ease;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   MOBILE OPTIMIZATION — all screen sizes, all OS versions
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+/* Compact phones (≤360px wide — Galaxy A, Redmi, older iPhones) */
+@media(max-width:360px){
+  .score-grid{ grid-template-columns:1fr; }
+  .score-cell .sc-val{ font-size:26px; }
+  .modal{ padding:18px 14px; }
+  .modal h2{ font-size:22px; }
+  .mmbtn{ padding:13px; font-size:14px; }
+  .menu-game-title{ font-size:26px; }
+  .menu-panda{ font-size:68px; }
+  .hud-stat .val{ font-size:16px; }
+  #daily-challenge-card{ padding:10px 12px; gap:10px; }
+}
+
+/* Medium phones (360–414px — most Android phones) */
+@media(min-width:361px) and (max-width:414px){
+  .score-cell .sc-val{ font-size:30px; }
+  .modal{ width:min(380px,95vw); }
+}
+
+/* Large phones / phablets (415–480px — iPhone Plus, Samsung Note) */
+@media(min-width:415px) and (max-width:480px){
+  .modal{ width:min(400px,95vw); }
+  .mmbtn{ font-size:17px; }
+}
+
+/* Very short screens (height ≤580px — some Android in landscape edge cases) */
+@media(max-height:580px){
+  .modal-emoji{ font-size:40px; margin-bottom:6px; }
+  .modal h2{ font-size:20px; }
+  .modal-bg{ padding-top:8px; }
+  .score-cell{ padding:10px 6px; }
+  .score-cell .sc-val{ font-size:24px; }
+  .mmbtn{ padding:11px; font-size:13px; }
+}
+
+/* Ensure touch targets are always ≥44px (Apple/Google HIG) */
+.mmbtn, .mbtn, .act-btn, .dir, .back-btn, .footer-exit{
+  min-height:44px;
+}
+
+/* Prevent text size inflation on iOS */
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+
+/* Stable layout on notch phones (iPhone X+, Android cutout) */
+.game-hud{
+  padding-top:max(8px, env(safe-area-inset-top,0px));
+}
+
+@media(max-height:700px){
+  .dpad{grid-template-columns:repeat(3,52px);grid-template-rows:52px 5px 52px;gap:6px}
+  .dir{width:52px;height:52px;font-size:19px}
+  .act-btn{height:42px;font-size:13px}
+  .canvas-wrap{width:min(88vw,calc(100dvh - 320px))}
+  .menu-hero{padding:16px 0 14px}
+  .menu-panda{font-size:68px}
+  .menu-game-title{font-size:28px}
+  .hud-stat .val{font-size:17px}
+}
+</style>
+</head>
+<body style="background:#071a0b;margin:0;">
+
+<!-- BOOT SCREEN — covers any white flash during JS load.
+     Removed immediately after window load event. -->
+<div id="boot" style="
+  position:fixed;inset:0;
+  background:#071a0b;
+  z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+"></div>
+
+<!-- ══════════════════════════════════════════
+     SPLASH
+══════════════════════════════════════════════ -->
+<div class="screen active" id="splash">
+  <div class="splash-panda">🐼</div>
+  <div class="splash-title">Bamboo Booper</div>
+  <div class="splash-sub">PANDA ARCADE ADVENTURE</div>
+  <div class="splash-track"><div class="splash-fill"></div></div>
+  <div class="splash-by">Bamboo Booper v1.0 · CodeTech · Lead Developer: Sachin Sheth</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     MAIN MENU
+══════════════════════════════════════════════ -->
+<div class="screen" id="menu">
+  <div class="leaf-bg" id="leaf-bg"></div>
+  <div class="menu-inner">
+    <div class="menu-hero">
+      <span class="menu-panda">🐼</span>
+      <div class="menu-game-title">Bamboo Booper</div>
+      <div class="menu-tagline">🎋 Panda Arcade Adventure</div>
+      <div class="menu-best">🏆 Best: <span id="menu-hi">0</span></div>
+      <!-- Daily Challenge Card -->
+      <div id="daily-challenge-card">
+        <span class="dc-icon">🌿</span>
+        <div class="dc-body">
+          <div class="dc-title" id="dc-label">Daily Challenge</div>
+          <div class="dc-goal" id="dc-goal-text">Score 20 Bamboo Today!</div>
+          <div class="dc-sub" id="dc-sub-text">Resets at midnight</div>
+          <div class="dc-progress"><div class="dc-progress-fill" id="dc-fill"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-btns">
+      <button class="mbtn play" id="m-play">
+        <span class="ico">🎮</span>
+        <span class="lbl">Play Game<small>Start your bamboo adventure!</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn settings" id="m-settings">
+        <span class="ico">⚙️</span>
+        <span class="lbl">Settings<small>Sound, reset &amp; preferences</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn about" id="m-about">
+        <span class="ico">ℹ️</span>
+        <span class="lbl">About<small>Developer &amp; app info</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn" id="m-leaderboard" style="background:linear-gradient(135deg,#f7c948,#c4930a);">
+        <span class="ico">🏆</span>
+        <span class="lbl">Leaderboard<small>Top 10 high scores</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn" id="m-achievements" style="background:linear-gradient(135deg,#e84f9b,#a01860);">
+        <span class="ico">🎖️</span>
+        <span class="lbl">Achievements<small>Unlock all 5 medals</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn policy" id="m-policy">
+        <span class="ico">🔒</span>
+        <span class="lbl">Privacy Policy<small>Your data &amp; privacy</small></span>
+        <span class="arr">›</span>
+      </button>
+      <button class="mbtn install" id="m-install">
+        <span class="ico">📲</span>
+        <span class="lbl">Install Bamboo Booper<small>Add to home screen — play offline!</small></span>
+        <span class="install-pulse"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SETTINGS
+══════════════════════════════════════════════ -->
+<div class="screen sub-screen" id="settings">
+  <div class="sub-bar">
+    <button class="back-btn" data-to="menu">←</button>
+    <h2>⚙️ Settings</h2>
+  </div>
+  <div class="sub-body">
+    <div class="card">
+      <h3>🔊 Audio</h3>
+      <div class="srow">
+        <div class="srow-info">
+          <div class="srow-label">Sound Effects</div>
+          <div class="srow-sub">Eating, game over, button clicks</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="tog-sound" checked/>
+          <div class="tog-track"></div>
+        </label>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🎮 Gameplay</h3>
+      <div class="srow">
+        <div class="srow-info">
+          <div class="srow-label">Vibration</div>
+          <div class="srow-sub">Haptic feedback on events</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="tog-haptic" checked/>
+          <div class="tog-track"></div>
+        </label>
+      </div>
+      <div class="srow">
+        <div class="srow-info">
+          <div class="srow-label">Show Grid</div>
+          <div class="srow-sub">Display game grid lines</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="tog-grid" checked/>
+          <div class="tog-track"></div>
+        </label>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🏆 Progress</h3>
+      <button class="danger-btn" id="btn-reset-hi">🗑 Reset High Score</button>
+      <button class="danger-btn" id="btn-reset-lb" style="margin-top:10px">🗑 Reset Leaderboard</button>
+      <button class="danger-btn" id="btn-reset-ach" style="margin-top:10px">🗑 Reset Achievements</button>
+    </div>
+    <div class="card">
+      <h3>📋 App Info</h3>
+      <div class="srow">
+        <div class="srow-info"><div class="srow-label">Version</div></div>
+        <div style="font-size:14px;font-weight:700;color:var(--green-light)">1.0</div>
+      </div>
+      <div class="srow">
+        <div class="srow-info"><div class="srow-label">Developer</div></div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-dim)">CodeTech</div>
+      </div>
+      <div class="srow">
+        <div class="srow-info"><div class="srow-label">Lead Developer</div></div>
+        <div style="font-size:14px;font-weight:700;color:var(--text-dim)">Sachin Sheth</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════════ -->
+<div class="screen sub-screen" id="about">
+  <div class="sub-bar">
+    <button class="back-btn" data-to="menu">←</button>
+    <h2>ℹ️ About</h2>
+  </div>
+  <div class="sub-body">
+    <div class="about-hero">
+      <div class="big-panda">🐼</div>
+      <h2>Bamboo Booper</h2>
+      <p>Panda Arcade Adventure · v1.0</p>
+    </div>
+    <div class="card">
+      <h3>🎮 The Game</h3>
+      <p>Guide a hungry panda through a bamboo forest in this classic snake-style arcade game. Eat bamboo to grow longer, level up through 6 stages, and unlock special panda skins — all while avoiding walls and your own tail!</p>
+    </div>
+    <div class="card">
+      <h3>✨ Features</h3>
+      <p>
+        <span class="badge">6 Skins</span>
+        <span class="badge">6 Levels</span>
+        <span class="badge">Speed Control</span>
+        <span class="badge">Score Cards</span>
+        <span class="badge">Offline Play</span>
+        <span class="badge">Sound FX</span>
+        <span class="badge">Haptics</span>
+        <span class="badge">PWA</span>
+      </p>
+    </div>
+    <div class="card">
+      <h3>👨‍💻 Developer</h3>
+      <div class="srow"><div class="srow-info"><div class="srow-label">Company</div></div><div style="font-size:14px;font-weight:700;color:var(--green-light)">CodeTech</div></div>
+      <div class="srow"><div class="srow-info"><div class="srow-label">Lead Developer</div></div><div style="font-size:14px;font-weight:700;color:var(--green-light)">Sachin Sheth</div></div>
+      <div class="srow"><div class="srow-info"><div class="srow-label">Version</div></div><div style="font-size:14px;font-weight:700;color:var(--text-dim)">1.0</div></div>
+      <div class="srow"><div class="srow-info"><div class="srow-label">🌐 Live Deployment</div></div></div>
+      <div style="padding:6px 0 4px">
+        <a href="https://bamboo-booper.vercel.app" target="_blank" rel="noopener"
+           style="display:block;font-size:12px;color:var(--blue);word-break:break-all;padding:4px 0">
+          bamboo-booper.vercel.app
+        </a>
+        <a href="https://sachincodetech.github.io/Bamboo-booper/" target="_blank" rel="noopener"
+           style="display:block;font-size:12px;color:var(--blue);word-break:break-all;padding:4px 0;border-top:1px solid var(--card-border);margin-top:4px;padding-top:8px">
+          sachincodetech.github.io/Bamboo-booper
+        </a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>🕹 How to Play</h3>
+      <ul>
+        <li>Use the D-pad or swipe on the canvas to move your panda</li>
+        <li>Eat 🎋 bamboo to score and grow your tail</li>
+        <li>Avoid hitting walls or your own body</li>
+        <li>Reach Level 6 to unlock all 6 panda skins</li>
+        <li>Use Speed control to ramp up the challenge</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>📜 Libraries</h3>
+      <p>jsPDF (MIT) — Score card PDF generation<br>cdnjs.cloudflare.com CDN delivery</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PRIVACY POLICY
+══════════════════════════════════════════════ -->
+<div class="screen sub-screen" id="privacy">
+  <div class="sub-bar">
+    <button class="back-btn" data-to="menu">←</button>
+    <h2>🔒 Privacy Policy</h2>
+  </div>
+  <div class="sub-body">
+    <div class="card">
+      <h3>🔒 Our Commitment</h3>
+      <p>CodeTech is committed to your privacy. This policy explains exactly what Bamboo Booper does — and does not do — with your data.</p>
+      <p style="margin-top:8px"><strong style="color:var(--green-light)">Effective: April 01, 2026</strong></p>
+    </div>
+    <div class="card">
+      <h3>🚫 Data We Do NOT Collect</h3>
+      <ul>
+        <li>Name, email, or personal identifiers</li>
+        <li>Location or GPS data</li>
+        <li>Device or advertising IDs</li>
+        <li>Analytics or usage telemetry</li>
+        <li>Payment or financial data</li>
+        <li>Camera, microphone, or contacts</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>💾 Local Storage Only</h3>
+      <p>The following data is stored <strong>only on your device</strong>, never transmitted:</p>
+      <ul style="margin-top:8px">
+        <li>Your player name (for score screen)</li>
+        <li>Your high score</li>
+        <li>Selected panda skin</li>
+        <li>App settings (sound, haptics, etc.)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🌐 Third-Party CDN</h3>
+      <p>The jsPDF library is loaded from <strong>cdnjs.cloudflare.com</strong> for PDF score cards. This is a standard CDN request — no personal data is transmitted. See Cloudflare's privacy policy for details.</p>
+    </div>
+    <div class="card">
+      <h3>👶 Children's Privacy</h3>
+      <p>Bamboo Booper is family-friendly and suitable for all ages. We do not knowingly collect data from children under 13.</p>
+    </div>
+    <div class="card">
+      <h3>📬 Contact</h3>
+      <p>Questions about this policy? Contact:<br><strong>CodeTech — Sachin Sheth</strong><br>App: Bamboo Booper v1.0</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LEADERBOARD SCREEN
+══════════════════════════════════════════════ -->
+<div class="screen sub-screen" id="leaderboard">
+  <div class="sub-bar">
+    <button class="back-btn" data-to="menu">←</button>
+    <h2>🏆 Leaderboard</h2>
+    <button id="lb-clear-btn" style="font-size:11px;padding:6px 12px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--text-dim);border:1px solid rgba(255,255,255,.12);">Clear</button>
+  </div>
+  <div class="sub-body">
+    <ul class="lb-list" id="lb-list">
+      <li class="lb-empty">🐼 No scores yet — play a game!</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ACHIEVEMENTS SCREEN
+══════════════════════════════════════════════ -->
+<div class="screen sub-screen" id="achievements">
+  <div class="sub-bar">
+    <button class="back-btn" data-to="menu">←</button>
+    <h2>🎖️ Achievements</h2>
+  </div>
+  <div class="sub-body">
+    <div class="ach-grid" id="ach-grid"></div>
+  </div>
+</div>
+
+<!-- ACHIEVEMENT UNLOCK TOAST -->
+<div id="ach-toast"></div>
+
+<!-- ══════════════════════════════════════════
+     GAME SCREEN
+══════════════════════════════════════════════ -->
+<div class="screen" id="game-screen">
+  <div class="game-hud">
+    <div class="hud-left">
+      <button class="hud-menu-btn" id="hud-menu">☰</button>
+      <span class="hud-title">🐼 Bamboo Booper</span>
+    </div>
+    <div class="hud-level" id="hud-level">Lv 1</div>
+  </div>
+  <div class="hud-stats">
+    <div class="hud-stat"><div class="val" id="hs-score">0</div><div class="lbl">🎋 EATEN</div></div>
+    <div class="hud-stat gold-stat"><div class="val" id="hs-hi">0</div><div class="lbl">🏆 BEST</div></div>
+    <div class="hud-stat"><div class="val" id="hs-spd">1.0×</div><div class="lbl">⚡ SPEED</div></div>
+    <div class="hud-stat"><div class="val" id="hs-time">0:00</div><div class="lbl">⏱ TIME</div></div>
+    <div class="hud-stat combo-stat"><div class="val" id="hs-combo">–</div><div class="lbl">🔥 COMBO</div></div>
+  </div>
+  <div class="canvas-zone">
+    <div class="canvas-wrap">
+      <canvas id="gc"></canvas>
+    </div>
+  </div>
+  <div class="steps-bar">👣 <span id="moves-disp">0</span> steps</div>
+  <div class="ctrl-dock">
+    <div class="dpad">
+      <button class="dir" id="du" aria-label="Up">↑</button>
+      <button class="dir" id="dl" aria-label="Left">←</button>
+      <button class="dir" id="dd" aria-label="Down">↓</button>
+      <button class="dir" id="dr" aria-label="Right">→</button>
+    </div>
+  </div>
+  <div class="act-bar">
+    <button class="act-btn" id="btn-pause">⏸ Pause</button>
+    <button class="act-btn" id="btn-start">▶ Start</button>
+    <button class="act-btn" id="btn-speed">⚡ <span id="spd-lbl">1.0×</span></button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     WELCOME OVERLAY
+══════════════════════════════════════════════ -->
+<div class="screen" id="welcome">
+  <div class="wcard">
+    <div class="big-panda">🐼</div>
+    <h2>Welcome!</h2>
+    <p>Enter your name to begin your bamboo adventure</p>
+    <input class="name-input" id="name-inp" type="text" placeholder="Your Name" maxlength="20" autocomplete="off"/>
+    <button class="go-btn" id="go-btn">🎮 Start Playing</button>
+  </div>
+</div>
+
+<!-- PAUSE MODAL -->
+<div class="modal-bg" id="pause-modal">
+  <div class="modal">
+    <div class="modal-emoji">⏸</div>
+    <h2>Game Paused</h2>
+    <p class="modal-sub">Take a breather, <span class="pause-name"></span>!</p>
+    <div class="modal-btns">
+      <button class="mmbtn primary"   id="pm-resume">▶ Resume Game</button>
+      <button class="mmbtn secondary" id="pm-restart">🔄 Restart</button>
+      <button class="mmbtn to-menu-btn" id="pm-menu">🏠 Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME OVER MODAL -->
+<div class="modal-bg" id="go-modal">
+  <div class="modal">
+    <div class="modal-emoji">🎮</div>
+    <h2>Game Over!</h2>
+    <div class="player-tag">👤 <span id="go-name"></span></div>
+    <div id="go-newbest" class="new-best" style="display:none">🏆 NEW HIGH SCORE! 🎉</div>
+    <div id="go-lvlup" class="lvlup" style="display:none">✨ LEVEL UP — Reached Lv <span id="go-newlv"></span>! ✨</div>
+    <div id="go-unlock" class="unlock-card" style="display:none">
+      🎉 Unlocked: <span id="go-unlock-name"></span>!
+    </div>
+    <div class="score-grid">
+      <div class="score-cell"><div class="sc-val" id="go-score">0</div><div class="sc-lbl">🎋 Eaten</div></div>
+      <div class="score-cell gold"><div class="sc-val" id="go-hi">0</div><div class="sc-lbl">🏆 Best</div></div>
+      <div class="score-cell"><div class="sc-val" id="go-lv">1</div><div class="sc-lbl">🎯 Level</div></div>
+      <div class="score-cell"><div class="sc-val" id="go-time">0:00</div><div class="sc-lbl">⏱ Time</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="mmbtn primary"     id="gom-again">🔄 Play Again</button>
+      <button class="mmbtn orange"      id="gom-card">📄 Score Card PDF</button>
+      <button class="mmbtn blue"        id="gom-share">📤 Share Score</button>
+      <button class="mmbtn"             id="gom-challenge" style="background:linear-gradient(135deg,#e84f4f,#a01020)">🔥 Challenge a Friend</button>
+      <button class="mmbtn secondary"   id="gom-skins">🎨 Skins</button>
+      <button class="mmbtn to-menu-btn" id="gom-menu">🏠 Main Menu</button>
+    </div>
+  </div>
+</div>
+
+<!-- SKINS MODAL -->
+<div class="modal-bg" id="skins-modal">
+  <div class="modal">
+    <div class="modal-emoji">🎨</div>
+    <h2>Panda Skins</h2>
+    <p class="modal-sub">Unlock by reaching higher levels</p>
+    <div class="skin-grid" id="skin-grid"></div>
+    <div class="modal-btns">
+      <button class="mmbtn secondary" id="sm-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- LEVEL-UP BANNER (Suggestion 1: level-up animation) -->
+<div id="lvlup-banner">
+  <span id="lvlup-title">LEVEL 2</span>
+  <span class="lvl-sub" id="lvlup-sub">Speed Increased!</span>
+</div>
+
+<!-- INSTALL MODAL -->
+<div id="install-modal">
+  <div class="imod-card" id="imod-inner"></div>
+</div>
+
+<!-- EXIT CONFIRMATION MODAL -->
+<div class="modal-bg" id="exit-modal" style="z-index:9500">
+  <div class="modal" style="max-width:300px">
+    <div class="modal-emoji">🐼</div>
+    <h2 style="font-size:20px">Exit Bamboo Booper?</h2>
+    <p class="modal-sub">Your panda will miss the bamboo!</p>
+    <div class="modal-btns">
+      <button class="mmbtn primary"   onclick="navigator.vibrate&&navigator.vibrate(20);closeExitDialog()">Cancel</button>
+      <button class="mmbtn secondary" onclick="navigator.vibrate&&navigator.vibrate(20);exitApp()">Exit</button>
+    </div>
+  </div>
+</div>
+
+<!-- COUNTDOWN OVERLAY -->
+<div id="countdown-overlay"><div class="cd-circle"><div class="cd-num" id="cd-num">3</div><div class="cd-label">GET READY</div></div></div>
+
+<!-- DAILY CHALLENGE COMPLETE BANNER -->
+<div id="dc-banner">
+  <span class="dc-banner-emoji">🎉</span>
+  <div class="dc-banner-title">Daily Challenge Completed!</div>
+  <div class="dc-banner-sub">Achievement Unlocked: Daily Bamboo Master 🏅</div>
+</div>
+
+<!-- CHALLENGE LINK BAR (shown when ?challenge=N in URL) -->
+<div id="challenge-link-bar">
+  🔥 Beat this score: <span id="challenge-target-display">0</span> bamboo!
+  <span style="opacity:.6;font-size:11px;margin-left:8px">Good luck 🐼</span>
+</div>
+
+<!-- PERSISTENT FOOTER (always visible, single line, safe-area aware) -->
+<div id="app-footer">
+  <span class="footer-text">Bamboo Booper v1.0 · CodeTech · Lead Developer: Sachin Sheth</span>
+  <button class="footer-exit" id="footer-exit-btn">✕ Exit</button>
+</div>
+
+<!-- PWA INSTALL BAR -->
+<div id="install-bar">
+  <div class="ib-icon">🐼</div>
+  <div class="ib-text">
+    <strong>Install Bamboo Booper</strong>
+    <small>Play offline, anytime!</small>
+  </div>
+  <div class="ib-btns">
+    <button id="btn-install">⬇ Install</button>
+    <button id="btn-dismiss">Not now</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+'use strict';
+// ══════════════════════════════════════════════════════════════
+//  BAMBOO BOOPER v6 FINAL — Indus Appstore / PWABuilder Ready
+//  SW: v14 · Full offline fix · Chrome data-clear safe · All bugs fixed
+// ══════════════════════════════════════════════════════════════
+
+// ─── Version constant (Suggestion #2-5: version display) ─────
+const GAME_VERSION = '1.0';
+
+// ─── Global error guard (Suggestion #2-1: crash protection) ──
+window.onerror = function(msg, src, line, col, err){
+  console.error('[BambooBooper] Error:', msg, 'at', src, line + ':' + col, err);
+  // Don't crash the game loop — just log silently
+  return true;
+};
+window.addEventListener('unhandledrejection', e => {
+  console.error('[BambooBooper] Unhandled promise rejection:', e.reason);
+});
+
+// ─── Low-end device detection (Suggestion #3-2) ──────────────
+const LOW_POWER = !!(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+const MAX_CONFETTI_PIECES = LOW_POWER ? 14 : 38;
+const MAX_LEAF_COUNT      = LOW_POWER ? 6  : 12;
+
+// ─── Settings & persistence ──────────────────────────────────
+const S = {
+  sound:  JSON.parse(localStorage.getItem('bb_sound')  ?? 'true'),
+  haptic: JSON.parse(localStorage.getItem('bb_haptic') ?? 'true'),
+  grid:   JSON.parse(localStorage.getItem('bb_grid')   ?? 'true'),
+};
+function saveSetting(k,v){ S[k]=v; localStorage.setItem('bb_'+k, JSON.stringify(v)); }
+
+// ─── Audio engine ─────────────────────────────────────────────
+let AC = null;
+function getAC(){
+  if(!AC) try{ AC = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  return AC;
+}
+function playTone(freq, type='sine', dur=0.1, vol=0.25){
+  if(!S.sound) return;
+  const ac = getAC(); if(!ac) return;
+  try{
+    const o=ac.createOscillator(), g=ac.createGain();
+    o.connect(g); g.connect(ac.destination);
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(vol, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+dur);
+    o.start(ac.currentTime); o.stop(ac.currentTime+dur);
+  }catch(e){}
+}
+const SFX = {
+  eat(){
+    playTone(700,'sine',.09,.22);
+    setTimeout(()=>playTone(900,'sine',.07,.18),50);
+  },
+  gameOver(){
+    playTone(300,'sawtooth',.15,.3);
+    setTimeout(()=>playTone(200,'sawtooth',.2,.3),100);
+  },
+  levelUp(){
+    [400,500,650,800].forEach((f,i)=>setTimeout(()=>playTone(f,'square',.12,.2),i*80));
+  },
+  click(){ playTone(800,'sine',.05,.12); },
+  btn(){ playTone(600,'sine',.04,.1); }
+};
+
+// ─── Haptics ──────────────────────────────────────────────────
+function vibe(ms=30){
+  if(!S.haptic) return;
+  try{ navigator.vibrate?.(ms); }catch(e){}
+}
+
+// ─── Toast ────────────────────────────────────────────────────
+let toastTimer=null;
+function toast(msg,type='ok',dur=2200){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className=type+' show';
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),dur);
+}
+
+// ─── Footer visibility ────────────────────────────────────────
+// Show footer on all screens EXCEPT game-screen (which has its own controls)
+function syncFooter(screenId){
+  const footer = document.getElementById('app-footer');
+  if(screenId === 'game-screen'){
+    footer.classList.add('hidden');
+  } else {
+    footer.classList.remove('hidden');
+  }
+}
+
+// ─── Screen router ────────────────────────────────────────────
+const screens = ['splash','menu','settings','about','privacy','game-screen','welcome','leaderboard','achievements'];
+let currentScreen = 'splash';
+const history_stack = [];
+
+function showScreen(id, push=true){
+  const from = document.getElementById(currentScreen);
+  const to   = document.getElementById(id);
+  if(!to || id===currentScreen) return;
+  if(push && currentScreen !== 'splash') history_stack.push(currentScreen);
+  from?.classList.remove('active');
+  to.classList.add('active');
+  to.offsetHeight;
+  currentScreen = id;
+  syncFooter(id);
+  SFX.btn();
+  // Refresh daily challenge card whenever menu is shown
+  if(id === 'menu') updateDailyChallengeUI();
+}
+
+function goBack(){
+  if(history_stack.length===0){
+    if(currentScreen==='game-screen'){
+      if(gameRunning && !gamePaused && !gameOver) doPause();
+      return true;
+    }
+    return false;
+  }
+  const prev = history_stack.pop();
+  const from = document.getElementById(currentScreen);
+  const to   = document.getElementById(prev);
+  from?.classList.remove('active');
+  to?.classList.add('active');
+  currentScreen = prev;
+  syncFooter(prev);
+  return true;
+}
+
+// back buttons
+document.querySelectorAll('[data-to]').forEach(btn=>{
+  btn.addEventListener('click',()=>{ vibe(20); showScreen(btn.dataset.to, false); history_stack.length=0; });
+});
+
+// ─── Exit dialog helpers ──────────────────────────────────────
+function showExitDialog(){
+  const d=document.getElementById('exit-modal');
+  if(d) d.classList.add('open');
+}
+function closeExitDialog(){
+  const d=document.getElementById('exit-modal');
+  if(d) d.classList.remove('open');
+}
+
+// ─── exitApp() — closes like a real Android/TWA app ──────────
+// Chain: AndroidBridge → navigator.app → window.close → friendly exit screen
+function exitApp(){
+  closeExitDialog();
+
+  // 1. TWA / Cordova native bridge
+  if(window.AndroidBridge && typeof AndroidBridge.exitApp === 'function'){
+    AndroidBridge.exitApp(); return;
+  }
+  // Also handle alternate bridge method name
+  if(window.AndroidBridge && typeof AndroidBridge.exit === 'function'){
+    AndroidBridge.exit(); return;
+  }
+
+  // 2. Cordova/PhoneGap navigator.app
+  if(navigator.app && navigator.app.exitApp){
+    navigator.app.exitApp(); return;
+  }
+
+  // 3. window.close() — works in TWA or script-opened windows
+  window.close();
+
+  // 4. Friendly exit screen — NO blank page / NO about:blank
+  //    (shown only if window.close() didn't work, i.e. browser PWA context)
+  setTimeout(()=>{
+    if(!document.hidden){
+      document.body.innerHTML = `
+        <div style="position:fixed;inset:0;display:flex;align-items:center;
+          justify-content:center;background:#071a0b;font-family:system-ui,sans-serif;
+          color:#fff;text-align:center;padding:32px;">
+          <div>
+            <div style="font-size:80px;margin-bottom:20px;
+              animation:bob 2s ease-in-out infinite">🐼</div>
+            <h2 style="font-size:24px;font-weight:900;color:#7eed9a;margin-bottom:10px">
+              Thanks for playing!</h2>
+            <p style="font-size:15px;color:rgba(255,255,255,.7);margin-bottom:28px">
+              Bamboo Booper v1.0 · CodeTech</p>
+            <button onclick="location.reload()"
+              style="padding:14px 36px;background:linear-gradient(135deg,#3dba5e,#2d8f48);
+              color:#fff;border:none;border-radius:28px;font-size:16px;
+              font-weight:700;cursor:pointer">
+              🎮 Play Again
+            </button>
+            <style>@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}</style>
+          </div>
+        </div>`;
+    }
+  }, 120);
+}
+
+// Keep confirmExit as alias
+function confirmExit(){ exitApp(); }
+
+// ─── Footer exit button ───────────────────────────────────────
+document.getElementById('footer-exit-btn').addEventListener('click',()=>{
+  vibe(40); SFX.btn();
+  if(currentScreen === 'game-screen'){
+    // During gameplay → pause first, then return to menu
+    if(gameRunning && !gameOver){
+      doPause();
+      setTimeout(()=>{
+        document.getElementById('pause-modal').classList.remove('open');
+        gamePaused=false;
+        showScreen('menu',false);
+        history_stack.length=0;
+      },150);
+    } else {
+      showScreen('menu',false);
+      history_stack.length=0;
+    }
+  } else if(currentScreen === 'menu'){
+    // On menu → show exit confirmation
+    showExitDialog();
+  } else {
+    // Any sub-screen → go back to menu
+    showScreen('menu',false);
+    history_stack.length=0;
+  }
+});
+
+// ─── Back button — Suggestion #1 & #3 ────────────────────────
+// Behaviour:
+//   During gameplay  → pause (return to game via resume / menu btn)
+//   On main menu     → show exit confirmation dialog
+//   Sub-screens      → navigate back one step
+//   Double-back on menu (within 2 s) → show "press again" toast, 2nd → exit
+let lastBackTime = 0;
+
+// Push an initial history entry so the first back is captured
+history.pushState({bb:'root'}, '');
+
+function handleBack(){
+  // If a modal is open, close it instead
+  const exitModal = document.getElementById('exit-modal');
+  if(exitModal && exitModal.classList.contains('open')){
+    closeExitDialog();
+    history.pushState({bb:'root'}, '');
+    return;
+  }
+
+  // During active gameplay → pause
+  if(currentScreen === 'game-screen' && gameRunning && !gamePaused && !gameOver){
+    doPause();
+    history.pushState({bb:'root'}, '');
+    return;
+  }
+
+  // Navigate back if possible
+  if(goBack()){
+    history.pushState({bb:'page'}, '');
+    return;
+  }
+
+  // At root (main menu or nowhere to go back) — double-back-to-exit
+  const now = Date.now();
+  if(now - lastBackTime < 2000){
+    // Second back within 2 s → exit
+    showExitDialog();
+  } else {
+    lastBackTime = now;
+    showBackToast('Press back again to exit');
+  }
+  history.pushState({bb:'root'}, '');
+}
+
+// Suggestion #3: "Press back again to exit" toast helper
+function showBackToast(msg){
+  let t = document.getElementById('back-exit-toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'back-exit-toast';
+    t.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);' +
+      'background:rgba(20,20,20,.92);color:#fff;padding:10px 22px;border-radius:22px;' +
+      'font-size:13px;font-weight:700;z-index:9600;white-space:nowrap;' +
+      'box-shadow:0 4px 18px rgba(0,0,0,.5);pointer-events:none;' +
+      'border:1px solid rgba(61,186,94,.3);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>{ t.style.opacity='0'; }, 2000);
+}
+
+// Android hardware back button (Cordova/TWA)
+document.addEventListener('backbutton', ()=>{ handleBack(); }, false);
+
+// Browser/PWA popstate back
+window.addEventListener('popstate', ()=>{ handleBack(); });
+
+// ─── Decorative leaves ────────────────────────────────────────
+(function spawnLeaves(){
+  const bg=document.getElementById('leaf-bg');
+  const emojis=['🎋','🍃','🌿','🎍'];
+  for(let i=0;i<MAX_LEAF_COUNT;i++){
+    const el=document.createElement('div');
+    el.className='leaf';
+    el.textContent=emojis[i%emojis.length];
+    el.style.cssText=`left:${Math.random()*100}%;bottom:-60px;
+      animation-duration:${10+Math.random()*14}s;
+      animation-delay:${-Math.random()*14}s;
+      font-size:${28+Math.random()*28}px;`;
+    bg.appendChild(el);
+  }
+})();
+
+// ─── Splash → Menu ────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  syncSettingsUI();
+  updateMenuHi();
+  initDailyChallenge();   // ← daily challenge init
+  syncFooter('splash');
+  setTimeout(()=>{
+    document.getElementById('splash').classList.remove('active');
+    showScreen('menu', false);
+  }, 1950);
+});
+
+// ─── Menu navigation ─────────────────────────────────────────
+document.getElementById('m-play').addEventListener('click',()=>{
+  vibe(30); SFX.btn();
+  if(!hasStarted){
+    showScreen('welcome');
+  } else {
+    showScreen('game-screen');
+    if(!gameRunning && !gameOver) { /* idle, just show */ }
+  }
+});
+document.getElementById('m-settings').addEventListener('click',()=>{ vibe(20); showScreen('settings'); });
+document.getElementById('m-about').addEventListener('click',()=>{ vibe(20); showScreen('about'); });
+document.getElementById('m-policy').addEventListener('click',()=>{ vibe(20); showScreen('privacy'); });
+document.getElementById('m-leaderboard').addEventListener('click',()=>{ vibe(20); showScreen('leaderboard'); renderLeaderboard(); });
+document.getElementById('m-achievements').addEventListener('click',()=>{ vibe(20); showScreen('achievements'); renderAchievements(); });
+document.getElementById('hud-menu').addEventListener('click',()=>{
+  vibe(20); SFX.btn();
+  if(gameRunning && !gamePaused && !gameOver) doPause();
+  showScreen('menu', false); history_stack.length=0; history_stack.push('game-screen');
+});
+
+// ─── Settings UI ─────────────────────────────────────────────
+function syncSettingsUI(){
+  document.getElementById('tog-sound').checked  = S.sound;
+  document.getElementById('tog-haptic').checked = S.haptic;
+  document.getElementById('tog-grid').checked   = S.grid;
+}
+document.getElementById('tog-sound').addEventListener('change',e=>saveSetting('sound',e.target.checked));
+document.getElementById('tog-haptic').addEventListener('change',e=>saveSetting('haptic',e.target.checked));
+document.getElementById('tog-grid').addEventListener('change',e=>saveSetting('grid',e.target.checked));
+document.getElementById('btn-reset-hi').addEventListener('click',()=>{
+  vibe(60);
+  if(confirm('Reset your high score to 0?')){
+    localStorage.removeItem('bb_hi');
+    highscore=0; hs_hi.textContent=0; updateMenuHi();
+    toast('High score reset!','info');
+  }
+});
+
+// ─── Welcome screen ──────────────────────────────────────────
+let playerName = localStorage.getItem('bb_name')||'';
+let hasStarted = false;
+
+const nameInp = document.getElementById('name-inp');
+if(playerName) nameInp.value = playerName;
+
+document.getElementById('go-btn').addEventListener('click',()=>startFromWelcome());
+nameInp.addEventListener('keypress',e=>{ if(e.key==='Enter') startFromWelcome(); });
+
+function startFromWelcome(){
+  const n=nameInp.value.trim();
+  if(!n){
+    nameInp.classList.add('err');
+    vibe(80);
+    setTimeout(()=>nameInp.classList.remove('err'),400);
+    return;
+  }
+  playerName=n; localStorage.setItem('bb_name',playerName);
+  hasStarted=true;
+  SFX.btn();
+  document.getElementById('welcome').classList.remove('active');
+  showScreen('game-screen', false);
+  history_stack.length=0;
+  resetGame(); initSounds();
+}
+
+function updateMenuHi(){
+  const hi=parseInt(localStorage.getItem('bb_hi')||'0');
+  document.getElementById('menu-hi').textContent=hi;
+}
+
+// ═══════════════════════════════════════════════════════════
+//  GAME ENGINE
+// ═══════════════════════════════════════════════════════════
+const canvas  = document.getElementById('gc');
+const ctx     = canvas.getContext('2d');
+const hs_score  = document.getElementById('hs-score');
+const hs_hi     = document.getElementById('hs-hi');
+const hs_spd    = document.getElementById('hs-spd');
+const hs_time   = document.getElementById('hs-time');
+const hs_combo  = document.getElementById('hs-combo');
+const hud_level = document.getElementById('hud-level');
+const spd_lbl   = document.getElementById('spd-lbl');
+const moves_disp= document.getElementById('moves-disp');
+
+const GRID=28;
+let COLS,ROWS;
+let score=0,moves=0,startTime=0;
+let highscore=parseInt(localStorage.getItem('bb_hi')||'0');
+let currentLevel=1;
+let comboCount=0,lastEatTime=0;
+hs_hi.textContent=highscore;
+
+let gameRunning=false,gamePaused=false,gameOver=false;
+let panda={x:0,y:0,dx:GRID,dy:0,cells:[],maxCells:4};
+let bamboo={x:0,y:0};
+let lastRaf=0,accumulator=0,baseInterval=260;
+const SPEEDS=[0.25,0.5,0.75,1.0,1.25,1.5,2.0,2.5,3.0];
+let spdIdx=3;
+let currentSkin=localStorage.getItem('bb_skin')||'classic';
+
+// Bamboo flash (Suggestion 1: bamboo glow effect on eat)
+let bambooFlashFrames = 0;  // counts down render frames for the flash
+
+// ─── Skins ────────────────────────────────────────────────────
+const SKINS={
+  classic:{e:'🐼',n:'Classic',lv:1},
+  ninja:  {e:'🥷',n:'Ninja',  lv:2},
+  golden: {e:'✨',n:'Golden', lv:3},
+  ghost:  {e:'👻',n:'Ghost',  lv:4},
+  robot:  {e:'🤖',n:'Robot',  lv:5},
+  alien:  {e:'👽',n:'Alien',  lv:6},
+};
+function buildSkins(){
+  const grid=document.getElementById('skin-grid');
+  grid.innerHTML='';
+  const maxLv=calcLv(highscore);
+  Object.entries(SKINS).forEach(([id,sk])=>{
+    const unlocked=maxLv>=sk.lv;
+    const d=document.createElement('div');
+    d.className='skin-opt'+(id===currentSkin?' sel':'')+(unlocked?'':' locked');
+    d.innerHTML=unlocked
+      ? `<span class="skin-emoji">${sk.e}</span><div class="sname">${sk.n}</div><div class="slv">Lv ${sk.lv}</div>`
+      : `<span class="lock">🔒</span><div class="sname">${sk.n}</div><div class="slv">Unlock Lv ${sk.lv}</div>`;
+    d.title=unlocked?`${sk.n} — Active`:`Unlock at Level ${sk.lv}`;
+    if(unlocked) d.onclick=()=>{ currentSkin=id; localStorage.setItem('bb_skin',id); buildSkins(); vibe(20); SFX.click(); };
+    grid.appendChild(d);
+  });
+}
+
+// ─── Level logic ─────────────────────────────────────────────
+function calcLv(s){ if(s<10)return 1;if(s<25)return 2;if(s<50)return 3;if(s<75)return 4;if(s<100)return 5;return 6; }
+
+let _lvlBannerTimer = null;
+function showLvlUpBanner(lv){
+  const banner = document.getElementById('lvlup-banner');
+  const title  = document.getElementById('lvlup-title');
+  const sub    = document.getElementById('lvlup-sub');
+  if(!banner) return;
+  title.textContent = 'LEVEL ' + lv;
+  sub.textContent   = lv >= 6 ? 'MAX LEVEL — All Skins Unlocked!' : 'Speed Increased!';
+  banner.classList.add('show');
+  clearTimeout(_lvlBannerTimer);
+  _lvlBannerTimer = setTimeout(()=>banner.classList.remove('show'), 1400);
+}
+
+function updateLevel(){
+  const nl=calcLv(score);
+  if(nl>currentLevel){
+    currentLevel=nl;
+    launchConfetti();
+    SFX.levelUp();
+    vibe([30,50,30]);
+    showLvlUpBanner(nl);   // ← NEW: show level-up banner
+  }
+  hud_level.textContent='Lv '+currentLevel;
+}
+
+// ─── Speed ────────────────────────────────────────────────────
+function updateSpd(){
+  const v=SPEEDS[spdIdx].toFixed(2)+'×';
+  hs_spd.textContent=SPEEDS[spdIdx].toFixed(1)+'×';
+  spd_lbl.textContent=v;
+}
+document.getElementById('btn-speed').addEventListener('click',()=>{ vibe(20); spdIdx=(spdIdx+1)%SPEEDS.length; updateSpd(); SFX.click(); });
+
+// ─── Canvas resize ────────────────────────────────────────────
+function resize(){
+  const wrap=document.querySelector('.canvas-wrap');
+  const sz=Math.min(wrap.clientWidth,wrap.clientHeight);
+  const gs=Math.floor(sz/GRID)*GRID;
+  canvas.width=gs; canvas.height=gs;
+  COLS=gs/GRID; ROWS=gs/GRID;
+}
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,120));
+resize();
+
+// ─── Random bamboo ────────────────────────────────────────────
+function randBamboo(){
+  let x,y;
+  do{ x=Math.floor(Math.random()*COLS)*GRID; y=Math.floor(Math.random()*ROWS)*GRID; }
+  while(panda.cells.some(c=>c.x===x&&c.y===y));
+  bamboo={x,y};
+}
+
+// ─── Reset game ───────────────────────────────────────────────
+function resetGame(){
+  panda.x=GRID*4; panda.y=Math.floor(ROWS/2)*GRID;
+  panda.dx=GRID; panda.dy=0; panda.cells=[]; panda.maxCells=4;
+  for(let i=0;i<4;i++) panda.cells.push({x:panda.x-i*GRID,y:panda.y});
+  score=0; moves=0; currentLevel=1; startTime=Date.now();
+  spdIdx=3; updateSpd();
+  comboCount=0; lastEatTime=0; hs_combo.textContent='–';
+  hs_score.textContent=0; moves_disp.textContent=0; hud_level.textContent='Lv 1';
+  _lastRenderedScore=-1; _lastRenderedCombo='';  // reset DOM guards
+  bambooFlashFrames=0;   // reset flash state
+  _dcCompletedThisGame=false; // reset daily challenge flag for this session
+  randBamboo();
+  gameRunning=true; gamePaused=false; gameOver=false;
+  accumulator=0;
+  document.getElementById('btn-start').textContent='⏸';
+  document.getElementById('go-modal').classList.remove('open');
+  document.getElementById('pause-modal').classList.remove('open');
+}
+
+// ─── Pause ────────────────────────────────────────────────────
+function doPause(){
+  if(!gameRunning||gameOver) return;
+  gamePaused=true;
+  document.querySelectorAll('.pause-name').forEach(el=>el.textContent=playerName);
+  document.getElementById('pause-modal').classList.add('open');
+  vibe(30);
+}
+document.getElementById('btn-pause').addEventListener('click',()=>{
+  if(gameOver) return;
+  SFX.btn();
+  if(gamePaused){ doResume(); } else { doPause(); }
+});
+
+// ─── Canvas countdown state ────────────────────────────────────
+let countdownActive = false;
+let countdownNum    = 0;
+let countdownAlpha  = 0;  // fade in/out alpha (0-1)
+let countdownScale  = 1;
+
+function doResume(){
+  document.getElementById('pause-modal').classList.remove('open');
+  let count = 3;
+  countdownActive = true;
+  countdownNum    = count;
+  countdownAlpha  = 0;
+  countdownScale  = 1.4;
+  vibe(40);
+
+  // Fade-in the first number
+  let fadeIn = setInterval(()=>{
+    countdownAlpha = Math.min(1, countdownAlpha + 0.12);
+    countdownScale = Math.max(1, countdownScale - 0.04);
+    if(countdownAlpha >= 1){ clearInterval(fadeIn); }
+  }, 16);
+
+  const tick = setInterval(()=>{
+    count--;
+    if(count > 0){
+      countdownNum   = count;
+      countdownAlpha = 0;
+      countdownScale = 1.4;
+      // fade in next number
+      let fi = setInterval(()=>{
+        countdownAlpha = Math.min(1, countdownAlpha + 0.12);
+        countdownScale = Math.max(1, countdownScale - 0.04);
+        if(countdownAlpha >= 1) clearInterval(fi);
+      }, 16);
+      vibe(30);
+    } else {
+      // fade out
+      countdownAlpha = 1;
+      let fo = setInterval(()=>{
+        countdownAlpha = Math.max(0, countdownAlpha - 0.08);
+        if(countdownAlpha <= 0){
+          clearInterval(fo);
+          clearInterval(tick);
+          countdownActive = false;
+          gamePaused = false;
+          vibe([20,30,20]);
+        }
+      }, 16);
+    }
+  }, 1000);
+}
+document.getElementById('pm-resume').addEventListener('click',()=>{ vibe(20); SFX.btn(); doResume(); });
+document.getElementById('pm-restart').addEventListener('click',()=>{
+  vibe(30); SFX.btn();
+  document.getElementById('pause-modal').classList.remove('open');
+  resetGame();
+});
+document.getElementById('pm-menu').addEventListener('click',()=>{
+  vibe(20); SFX.btn();
+  document.getElementById('pause-modal').classList.remove('open');
+  gamePaused=false;
+  showScreen('menu',false); history_stack.length=0; history_stack.push('game-screen');
+});
+
+// start/stop
+document.getElementById('btn-start').addEventListener('click',()=>{
+  SFX.btn();
+  if(gameOver){ resetGame(); }
+  else{ gameRunning=!gameRunning; gamePaused=!gameRunning; document.getElementById('btn-start').textContent=gameRunning?'⏸':'▶'; }
+});
+
+// ─── Input: keyboard ──────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(!gameRunning||gameOver||gamePaused) return;
+  const map={arrowleft:[-GRID,0],a:[-GRID,0],arrowright:[GRID,0],d:[GRID,0],arrowup:[0,-GRID],w:[0,-GRID],arrowdown:[0,GRID],s:[0,GRID]};
+  const d=map[e.key.toLowerCase()];
+  if(d) dir(d[0],d[1]);
+});
+
+// D-pad
+{const dirs={du:[0,-GRID],dl:[-GRID,0],dd:[0,GRID],dr:[GRID,0]};
+Object.entries(dirs).forEach(([id,[dx,dy]])=>{
+  const btn=document.getElementById(id);
+  const h=e=>{ e.preventDefault(); if(!gameRunning||gameOver||gamePaused)return; dir(dx,dy); vibe(15); };
+  btn.addEventListener('pointerdown',h);
+  btn.addEventListener('touchstart',h,{passive:false});
+});}
+
+// Swipe on canvas
+let sx=null,sy=null;
+canvas.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+canvas.addEventListener('touchend',e=>{
+  if(sx===null)return;
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)<20&&Math.abs(dy)<20){sx=sy=null;return;}
+  if(!gameRunning||gameOver||gamePaused){sx=sy=null;return;}
+  if(Math.abs(dx)>Math.abs(dy)) dir(dx>0?GRID:-GRID,0); else dir(0,dy>0?GRID:-GRID);
+  sx=sy=null;
+},{passive:true});
+
+function dir(dx,dy){ if(dx===-panda.dx&&dy===-panda.dy)return; panda.dx=dx; panda.dy=dy; moves++; moves_disp.textContent=moves; }
+
+// ─── Game update ──────────────────────────────────────────────
+// Track last-rendered values to avoid unnecessary DOM writes (Suggestion #3-4)
+let _lastRenderedScore = -1;
+let _lastRenderedCombo = '';
+
+function update(){
+  // Bug Fix: skip collision detection briefly after achievement popup to prevent unfair game loss
+  if(achievementPause) return;
+  panda.x+=panda.dx; panda.y+=panda.dy;
+  if(panda.x<0||panda.x>=canvas.width||panda.y<0||panda.y>=canvas.height){ endGame(); return; }
+  if(panda.x===bamboo.x&&panda.y===bamboo.y){
+    panda.maxCells++; score++;
+    // Only update DOM when value actually changed
+    if(score !== _lastRenderedScore){ hs_score.textContent=score; _lastRenderedScore=score; }
+    randBamboo(); SFX.eat(); vibe(15); updateLevel();
+    bambooFlashFrames = 7;  // ← trigger glow flash for ~7 render frames
+    // Combo tracking
+    const now = Date.now();
+    if(now - lastEatTime < 5000){ comboCount++; } else { comboCount=1; }
+    lastEatTime = now;
+    const comboTxt = comboCount > 1 ? comboCount+'×' : '–';
+    if(comboTxt !== _lastRenderedCombo){ hs_combo.textContent = comboTxt; _lastRenderedCombo = comboTxt; }
+    if(score%10===0) launchConfetti();
+    // Mid-game achievement checks (first bamboo, combo master)
+    checkAchievements(score, comboCount, currentLevel);
+    // Daily challenge progress check
+    checkDailyChallenge(score);
+  }
+  panda.cells.unshift({x:panda.x,y:panda.y});
+  if(panda.cells.length>panda.maxCells) panda.cells.pop();
+  for(let i=1;i<panda.cells.length;i++){
+    if(panda.x===panda.cells[i].x&&panda.y===panda.cells[i].y){ endGame(); return; }
+  }
+}
+
+// ─── Timer ────────────────────────────────────────────────────
+let timerStr='0:00';
+function updateTimer(){
+  if(!gameRunning||gameOver||gamePaused) return;
+  const e=Math.floor((Date.now()-startTime)/1000);
+  timerStr=`${Math.floor(e/60)}:${String(e%60).padStart(2,'0')}`;
+  hs_time.textContent=timerStr;
+}
+
+// ─── Render ───────────────────────────────────────────────────
+function render(){
+  ctx.fillStyle='#0a1f0d'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  if(S.grid){
+    ctx.strokeStyle='rgba(61,186,94,.06)'; ctx.lineWidth=1;
+    for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*GRID,0);ctx.lineTo(i*GRID,canvas.height);ctx.stroke();}
+    for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*GRID);ctx.lineTo(canvas.width,i*GRID);ctx.stroke();}
+  }
+  ctx.save();
+  // Bamboo flash effect: glow burst for a few frames after eating
+  if(bambooFlashFrames > 0){
+    const flashIntensity = bambooFlashFrames / 7;
+    ctx.shadowColor = `rgba(76,255,106,${flashIntensity})`;
+    ctx.shadowBlur  = 24 * flashIntensity;
+    ctx.globalAlpha = 0.6 + 0.4 * flashIntensity;
+    bambooFlashFrames--;
+  } else {
+    ctx.shadowColor='rgba(126,237,154,.5)'; ctx.shadowBlur=12;
+  }
+  ctx.font=`${GRID*.9}px Arial`; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('🎋',bamboo.x+GRID/2,bamboo.y+GRID/2);
+  ctx.restore();
+  panda.cells.forEach((seg,i)=>{
+    if(i===0){
+      ctx.font=`${GRID*.9}px Arial`; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(SKINS[currentSkin].e,seg.x+GRID/2,seg.y+GRID/2);
+    } else {
+      const alpha=Math.max(0.3,1-i*0.06);
+      ctx.fillStyle=`rgba(61,186,94,${alpha})`;
+      ctx.strokeStyle='rgba(0,0,0,.4)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(seg.x+GRID/2,seg.y+GRID/2,GRID*.38,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+  });
+
+  // ── Draw countdown directly on canvas (100% transparent bg guaranteed) ──
+  if(countdownActive && countdownAlpha > 0){
+    const cx2 = canvas.width / 2;
+    const cy2 = canvas.height / 2;
+    const r   = Math.min(canvas.width, canvas.height) * 0.28; // circle radius
+    const a   = countdownAlpha;
+    const sc  = countdownScale;
+
+    ctx.save();
+    ctx.globalAlpha = a;
+    ctx.translate(cx2, cy2);
+    ctx.scale(sc, sc);
+
+    // Glowing ring ONLY — no fill background
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(126,237,154,${0.9 * a})`;
+    ctx.lineWidth   = Math.max(3, canvas.width * 0.007);
+    // outer glow
+    ctx.shadowColor = 'rgba(61,186,94,0.95)';
+    ctx.shadowBlur  = canvas.width * 0.08;
+    ctx.stroke();
+    ctx.shadowBlur  = 0;
+
+    // Number — with black outline for readability on any game background
+    const numSize = r * 1.35;
+    ctx.font      = `900 ${numSize}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Black outline (thick stroke first)
+    ctx.strokeStyle = 'rgba(0,0,0,0.95)';
+    ctx.lineWidth   = numSize * 0.12;
+    ctx.lineJoin    = 'round';
+    ctx.strokeText(String(countdownNum), 0, 0);
+
+    // White fill
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(String(countdownNum), 0, 0);
+
+    // Green glow on top
+    ctx.shadowColor = 'rgba(126,237,154,1)';
+    ctx.shadowBlur  = numSize * 0.3;
+    ctx.fillStyle   = 'rgba(255,255,255,0.85)';
+    ctx.fillText(String(countdownNum), 0, 0);
+    ctx.shadowBlur  = 0;
+
+    // "GET READY" label
+    const lblSize = r * 0.22;
+    ctx.font      = `900 ${lblSize}px Arial`;
+    ctx.letterSpacing = '0.1em';
+    // black outline
+    ctx.strokeStyle = 'rgba(0,0,0,0.9)';
+    ctx.lineWidth   = lblSize * 0.2;
+    ctx.strokeText('GET READY', 0, r * 0.7);
+    // green text
+    ctx.fillStyle   = 'rgba(126,237,154,1)';
+    ctx.shadowColor = 'rgba(61,186,94,0.8)';
+    ctx.shadowBlur  = lblSize * 0.5;
+    ctx.fillText('GET READY', 0, r * 0.7);
+    ctx.shadowBlur  = 0;
+
+    ctx.restore();
+  }
+}
+
+// ─── Game loop  (Suggestion #2-7 / #3-1 / #4-1: safe ~60 FPS cap) ──
+const MIN_FRAME_MS = 16; // ~60 FPS — prevents CPU overload on fast devices
+
+function loop(ts){
+  if(!lastRaf) lastRaf = ts;
+  const delta = ts - lastRaf;
+
+  // FPS cap: skip frame if less than MIN_FRAME_MS has elapsed
+  if(delta < MIN_FRAME_MS){
+    requestAnimationFrame(loop);
+    return;
+  }
+  lastRaf = ts;
+
+  if(gameRunning && !gameOver && !gamePaused){
+    const iv = baseInterval / SPEEDS[spdIdx];
+    accumulator += delta;
+    while(accumulator >= iv){ accumulator -= iv; update(); if(gameOver) break; }
+    updateTimer();
+  }
+  render();
+  requestAnimationFrame(loop);
+}
+buildSkins();
+requestAnimationFrame(loop);
+
+// ─── Pause when tab/app hidden (Suggestion #2-2 / #3-7 / #4-2) ──
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden && gameRunning && !gamePaused && !gameOver){
+    doPause();
+  }
+});
+
+// ─── End game ─────────────────────────────────────────────────
+function checkUnlocks(){
+  const nm=calcLv(score), om=calcLv(highscore);
+  return Object.values(SKINS).filter(s=>s.lv<=nm&&s.lv>om);
+}
+
+// ─── Screen shake ─────────────────────────────────────────────
+function screenShake(){
+  const el = document.getElementById('game-screen');
+  if(!el) return;
+  el.classList.remove('shake');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('shake');
+  setTimeout(()=> el.classList.remove('shake'), 260);
+}
+
+// ─── Achievement pause guard (Bug Fix: prevents game loss during popup) ──
+let achievementPause = false;
+
+function endGame(){
+  gameRunning=false; gameOver=true;
+  SFX.gameOver(); vibe([50,30,80,30,50]);
+  screenShake(); // visual impact on game over
+  document.getElementById('go-name').textContent=playerName;
+  document.getElementById('go-score').textContent=score;
+  document.getElementById('go-hi').textContent=Math.max(score,highscore);
+  document.getElementById('go-lv').textContent=currentLevel;
+  document.getElementById('go-time').textContent=timerStr;
+
+  const isNew=score>highscore;
+  document.getElementById('go-newbest').style.display=isNew?'':'none';
+  if(isNew){ launchConfetti(); }
+
+  const oldLv=calcLv(highscore);
+  const lvUp=currentLevel>oldLv;
+  document.getElementById('go-lvlup').style.display=lvUp?'':'none';
+  if(lvUp) document.getElementById('go-newlv').textContent=currentLevel;
+
+  const unlocks=checkUnlocks();
+  const unlockEl=document.getElementById('go-unlock');
+  if(unlocks.length>0){
+    unlockEl.style.display='';
+    document.getElementById('go-unlock-name').textContent=unlocks.map(s=>s.e+' '+s.n).join(', ');
+    launchConfetti();
+  } else { unlockEl.style.display='none'; }
+
+  if(score>highscore){
+    highscore=score;
+    localStorage.setItem('bb_hi',highscore);
+    hs_hi.textContent=highscore;
+    updateMenuHi();
+  }
+
+  // ── Save to leaderboard ──────────────────────────────────────
+  saveToLeaderboard(playerName, score, currentLevel, timerStr);
+
+  // ── Check achievements ───────────────────────────────────────
+  checkAchievements(score, comboCount, currentLevel);
+
+  document.getElementById('go-modal').classList.add('open');
+  document.getElementById('btn-start').textContent='▶';
+}
+
+// ─── Game over buttons ────────────────────────────────────────
+document.getElementById('gom-again').addEventListener('click',()=>{
+  vibe(30); SFX.btn();
+  document.getElementById('go-modal').classList.remove('open');
+  document.getElementById('pause-modal').classList.remove('open');
+  document.getElementById('skins-modal').classList.remove('open');
+  if(currentScreen !== 'game-screen'){
+    showScreen('game-screen', false);
+    history_stack.length=0;
+  }
+  resetGame();
+});
+document.getElementById('gom-card').addEventListener('click',()=>{ vibe(20); SFX.btn(); generateScoreCard(); });
+document.getElementById('gom-share').addEventListener('click',()=>{ vibe(20); SFX.btn(); shareScore(); });
+document.getElementById('gom-skins').addEventListener('click',()=>{ vibe(20); SFX.btn(); document.getElementById('go-modal').classList.remove('open'); buildSkins(); document.getElementById('skins-modal').classList.add('open'); });
+document.getElementById('gom-menu').addEventListener('click',()=>{
+  vibe(20); SFX.btn();
+  document.getElementById('go-modal').classList.remove('open');
+  // Full reset so game is clean when returning
+  gameOver=false; gameRunning=false; gamePaused=false;
+  document.getElementById('btn-start').textContent='▶ Start';
+  showScreen('menu',false); history_stack.length=0;
+});
+document.getElementById('sm-close').addEventListener('click',()=>{ vibe(15); SFX.btn(); document.getElementById('skins-modal').classList.remove('open'); document.getElementById('go-modal').classList.add('open'); });
+
+// ─── Score Card PDF  (v4 — Single themed page, no blank area) ───
+function generateScoreCard(){
+  if(!window.jspdf){ toast('PDF library loading…','info'); return; }
+  const { jsPDF } = window.jspdf;
+
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const W = doc.internal.pageSize.getWidth();   // 210mm
+  const H = doc.internal.pageSize.getHeight();  // 297mm
+  const cx = W / 2;
+  const m  = 10;
+
+  // ════════════════════════════════════════════════════
+  // FULL PAGE BACKGROUND — app themed dark green
+  // ════════════════════════════════════════════════════
+  doc.setFillColor(4, 16, 8);
+  doc.rect(0, 0, W, H, 'F');
+
+  // Subtle grid texture overlay
+  doc.setDrawColor(8, 35, 14);
+  doc.setLineWidth(0.15);
+  for(let gx = 0; gx < W; gx += 8){ doc.line(gx, 0, gx, H); }
+  for(let gy = 0; gy < H; gy += 8){ doc.line(0, gy, W, gy); }
+
+  // ════════════════════════════════════════════════════
+  // HEADER BANNER
+  // ════════════════════════════════════════════════════
+  const banH = 44;
+  doc.setFillColor(15, 60, 25);
+  doc.roundedRect(m+1, m+1, W-m*2, banH, 8, 8, 'F');
+  doc.setFillColor(40, 155, 68);
+  doc.roundedRect(m, m, W-m*2, banH, 8, 8, 'F');
+  doc.setFillColor(55, 185, 85);
+  doc.roundedRect(m, m, W-m*2, banH*0.5, 8, 8, 'F');
+  doc.setFillColor(40, 155, 68);
+  doc.rect(m, m+banH*0.38, W-m*2, banH*0.12, 'F');
+
+  // Panda face
+  (function panda(){
+    const pr=15, px=m+pr+3, py=m+banH/2;
+    doc.setFillColor(22,90,40); doc.circle(px,py,pr+3,'F');
+    doc.setFillColor(12,12,12); doc.circle(px-9,py-pr+2,5,'F'); doc.circle(px+9,py-pr+2,5,'F');
+    doc.setFillColor(248,248,248); doc.circle(px,py,pr,'F');
+    doc.setFillColor(18,18,18);
+    doc.ellipse(px-5.5,py-4.5,5,4.5,'F'); doc.ellipse(px+5.5,py-4.5,5,4.5,'F');
+    doc.setFillColor(255,255,255); doc.circle(px-5.5,py-4.5,2,'F'); doc.circle(px+5.5,py-4.5,2,'F');
+    doc.setFillColor(5,5,5); doc.circle(px-5.5,py-4.5,1,'F'); doc.circle(px+5.5,py-4.5,1,'F');
+    doc.setFillColor(255,255,255); doc.circle(px-4.8,py-5.5,0.6,'F'); doc.circle(px+6.2,py-5.5,0.6,'F');
+    doc.setFillColor(22,22,22); doc.ellipse(px,py+1.5,2,1.4,'F');
+    doc.setDrawColor(22,22,22); doc.setLineWidth(0.8);
+    doc.lines([[2.5,1.8],[2.5,-1.8]],px-2.5,py+3,[1,1],'S');
+  })();
+
+  const tx = m+40;
+  doc.setFont('helvetica','bold'); doc.setFontSize(24); doc.setTextColor(255,255,255);
+  doc.text('BAMBOO BOOPER', tx, m+16);
+  doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(210,255,225);
+  doc.text('PANDA ARCADE ADVENTURE', tx, m+26);
+  doc.setFontSize(8); doc.setTextColor(170,235,185);
+  doc.text('OFFICIAL SCORE CARD', tx, m+36);
+
+  // ════════════════════════════════════════════════════
+  // PLAYER NAME ROW
+  // ════════════════════════════════════════════════════
+  let y = m + banH + 6;
+  doc.setFillColor(8,30,14); doc.setDrawColor(61,186,94); doc.setLineWidth(1.5);
+  doc.roundedRect(m, y, W-m*2, 17, 6, 6, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(80,200,110);
+  doc.text('PLAYER:', m+10, y+11);
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(255,255,255);
+  doc.text(playerName || 'Unknown', m+38, y+11.5);
+  y += 22;
+
+  // NEW HIGH SCORE BANNER
+  if(score > 0 && score >= highscore){
+    doc.setFillColor(215,162,18);
+    doc.roundedRect(m, y, W-m*2, 13, 5, 5, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(8,28,8);
+    doc.text('*** NEW HIGH SCORE! ***', cx, y+9.5, {align:'center'});
+    y += 18;
+  }
+
+  // ════════════════════════════════════════════════════
+  // STATS GRID — 2 cols × 3 rows, compact for single page
+  // ════════════════════════════════════════════════════
+  const stats = [
+    { label:'Bamboo Eaten',  value: String(score),                  r:61,  g:186, b:94  },
+    { label:'Personal Best', value: String(highscore),              r:247, g:201, b:72  },
+    { label:'Level Reached', value: String(currentLevel),           r:79,  g:163, b:232 },
+    { label:'Total Steps',   value: String(moves),                  r:155, g:114, b:232 },
+    { label:'Time Played',   value: timerStr,                       r:249, g:115, b:22  },
+    { label:'Speed',         value: SPEEDS[spdIdx].toFixed(1)+'x', r:236, g:72,  b:153 },
+  ];
+
+  const gap   = 4;
+  const cellW = (W - m*2 - gap) / 2;
+  const cellH = 36;   // compact height to fit all on one page
+
+  stats.forEach((s, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const bx  = m + col * (cellW + gap);
+    const by  = y + row * (cellH + gap);
+
+    doc.setFillColor(8, 28, 14);
+    doc.setDrawColor(s.r, s.g, s.b); doc.setLineWidth(1.5);
+    doc.roundedRect(bx, by, cellW, cellH, 5, 5, 'FD');
+
+    // Left accent bar
+    doc.setFillColor(s.r, s.g, s.b);
+    doc.roundedRect(bx, by, 6, cellH, 4, 4, 'F');
+    doc.rect(bx+3, by, 3, cellH, 'F');
+
+    // Label
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.setTextColor(145, 210, 160);
+    doc.text(s.label, bx+11, by+12);
+
+    // Value
+    doc.setFont('helvetica','bold'); doc.setFontSize(24);
+    doc.setTextColor(s.r, s.g, s.b);
+    doc.text(s.value, bx+11, by+30);
+  });
+
+  y += 3 * (cellH + gap) + 6;
+
+  // ════════════════════════════════════════════════════
+  // DATE + SKIN ROW
+  // ════════════════════════════════════════════════════
+  doc.setFillColor(8,30,14); doc.setDrawColor(40,110,56); doc.setLineWidth(0.8);
+  doc.roundedRect(m, y, W-m*2, 14, 4, 4, 'FD');
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(170,235,190);
+  const dateStr = new Date().toLocaleDateString('en-IN',{ weekday:'short', day:'numeric', month:'short', year:'numeric' });
+  doc.text('Date: '+dateStr, m+8, y+9.5);
+  doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(126,237,154);
+  doc.text('Skin: '+SKINS[currentSkin].n, W-m-6, y+9.5, {align:'right'});
+  y += 19;
+
+  // ════════════════════════════════════════════════════
+  // SKINS PROGRESS ROW — fully visible on same page
+  // ════════════════════════════════════════════════════
+  const maxLv = calcLv(highscore);
+  const skinEntries = Object.entries(SKINS);
+  const skinGap = 3;
+  const sw2 = (W - m*2 - skinGap*(skinEntries.length-1)) / skinEntries.length;
+  const sh2 = 28;  // tall enough for name + level label
+
+  skinEntries.forEach(([, sk], i) => {
+    const unlocked = maxLv >= sk.lv;
+    const sx = m + i * (sw2 + skinGap);
+
+    // Background
+    doc.setFillColor(unlocked ? 20 : 6, unlocked ? 70 : 20, unlocked ? 32 : 10);
+    doc.setDrawColor(unlocked ? 61 : 20, unlocked ? 186 : 50, unlocked ? 94 : 25);
+    doc.setLineWidth(unlocked ? 1.5 : 0.5);
+    doc.roundedRect(sx, y, sw2, sh2, 4, 4, 'FD');
+
+    // Skin name
+    doc.setFont('helvetica', unlocked ? 'bold' : 'normal');
+    doc.setFontSize(unlocked ? 9 : 8);
+    doc.setTextColor(unlocked ? 200 : 70, unlocked ? 248 : 120, unlocked ? 210 : 85);
+    doc.text(sk.n, sx+sw2/2, y+12, {align:'center'});
+
+    // Level label
+    doc.setFont('helvetica','normal'); doc.setFontSize(7);
+    doc.setTextColor(unlocked ? 120 : 50, unlocked ? 220 : 90, unlocked ? 140 : 65);
+    doc.text('Lv '+sk.lv, sx+sw2/2, y+21, {align:'center'});
+
+    // OK badge for unlocked
+    if(unlocked){
+      doc.setFillColor(61,186,94);
+      doc.circle(sx+sw2-4, y+4, 3.2, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(4,16,8);
+      doc.text('OK', sx+sw2-7, y+5.5);
+    }
+  });
+  y += sh2 + 7;
+
+  // ════════════════════════════════════════════════════
+  // MOTIVATIONAL QUOTE
+  // ════════════════════════════════════════════════════
+  const msgs = [
+    [score >= 100, 'BAMBOO MASTER!  You are legendary!'],
+    [score >= 50,  'Amazing!  A true Panda Champion!'],
+    [score >= 25,  'Great run!  Keep eating that bamboo!'],
+    [score >= 10,  'Nice work!  Can you beat your best?'],
+    [true,         'Good start!  Every bamboo counts!'],
+  ];
+  const msg = msgs.find(([c]) => c)[1];
+
+  // Place quote — always above footer, never overlap
+  const quoteH  = 14;
+  const footerY = H - 20;
+  const quoteY  = Math.min(y, footerY - quoteH - 4);
+
+  doc.setFillColor(16,50,24); doc.setDrawColor(61,186,94); doc.setLineWidth(0.8);
+  doc.roundedRect(m, quoteY, W-m*2, quoteH, 4, 4, 'FD');
+  doc.setFont('helvetica','bold'); doc.setFontSize(10.5); doc.setTextColor(255,255,255);
+  doc.text(msg, cx, quoteY+10, {align:'center'});
+
+  // ════════════════════════════════════════════════════
+  // FOOTER — pinned at bottom of page
+  // ════════════════════════════════════════════════════
+  doc.setFillColor(35,138,60);
+  doc.roundedRect(m, H-18, W-m*2, 12, 4, 4, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(255,255,255);
+  doc.text('Bamboo Booper v1.0  |  CodeTech  |  Lead Developer: Sachin Sheth', cx, H-10, {align:'center'});
+
+  // ════════════════════════════════════════════════════
+  // SAVE
+  // ════════════════════════════════════════════════════
+  const fname = `BambooBooper_${(playerName||'Player').replace(/\s+/g,'_')}_Score${score}.pdf`;
+  doc.save(fname);
+  toast('📄 Score card saved!','ok',2500);
+}
+
+// ─── Share ────────────────────────────────────────────────────
+async function shareScore(){
+  const text=`🐼 ${playerName} ate ${score} bamboo & reached Level ${currentLevel} in Bamboo Booper! 🎋\nhttps://bamboo-booper.vercel.app`;
+  if(navigator.share){ try{ await navigator.share({title:'Bamboo Booper',text}); }catch(e){ copyText(text); } }
+  else copyText(text);
+}
+function copyText(t){
+  const el=document.createElement('textarea'); el.value=t;
+  document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+  toast('Score copied to clipboard!','ok');
+}
+
+// ─── Init sounds ──────────────────────────────────────────────
+function initSounds(){ getAC(); }
+
+// ─── Confetti ─────────────────────────────────────────────────
+function launchConfetti(){
+  const colors=['#f7c948','#3dba5e','#4fa3e8','#e8434f','#9b72e8','#7eed9a'];
+  for(let i=0;i<MAX_CONFETTI_PIECES;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');
+      el.className='conf-piece';
+      el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*.4}s;border-radius:${Math.random()>.5?'50%':'2px'};`;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),3000);
+    },i*30);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BOOT DIV — remove immediately after load (prevents white flash)
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('load', () => {
+  const boot = document.getElementById('boot');
+  if (boot) boot.remove();
+});
+
+// ═══════════════════════════════════════════════════════════
+//  SERVICE WORKER — v14 registration (Full Offline Fix)
+//  CRITICAL: Handles Chrome data-clear + offline startup
+// ═══════════════════════════════════════════════════════════
+(function registerSW() {
+  if (!('serviceWorker' in navigator)) return;
+
+  function doRegister() {
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+      .then(reg => {
+        console.log('[App] SW v14 registered:', reg.scope);
+
+        // Force-activate any waiting SW immediately
+        if (reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+
+        // Handle future SW updates
+        reg.addEventListener('updatefound', () => {
+          const sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener('statechange', () => {
+            if (sw.state === 'installed') {
+              sw.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+
+        // When SW takes control, confirm cache is ready
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          console.log('[App] SW now controlling page — offline ready.');
+        });
+      })
+      .catch(err => {
+        console.warn('[App] SW registration failed, retrying in 3s:', err);
+        // Retry after 3 seconds — handles cases where SW file fails to load
+        setTimeout(doRegister, 3000);
+      });
+  }
+
+  // Register immediately — don't wait for window load
+  // This is critical for PWA cold-start after data clear
+  doRegister();
+
+  // CRITICAL: When internet comes back after data-clear,
+  // re-trigger SW registration to rebuild the cache
+  window.addEventListener('online', () => {
+    console.log('[App] Back online — ensuring SW/cache is fresh...');
+    doRegister();
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════
+//  PWA INSTALL SYSTEM
+// ═══════════════════════════════════════════════════════════
+let deferredPrompt = null;
+const iBar         = document.getElementById('install-bar');
+const mInstallBtn  = document.getElementById('m-install');
+const installModal = document.getElementById('install-modal');
+const imodInner    = document.getElementById('imod-inner');
+
+const isStandalone = window.matchMedia('(display-mode:standalone)').matches
+                  || window.navigator.standalone === true
+                  || document.referrer.includes('android-app://');
+
+function showInstallButton(show){
+  if(mInstallBtn) mInstallBtn.classList.toggle('visible', show);
+}
+
+function showInstallModal(type){
+  if(type === 'success'){
+    imodInner.innerHTML = `
+      <div class="imod-icon">🐼✅</div>
+      <div class="imod-title">Installed!</div>
+      <div class="imod-msg">Bamboo Booper has been installed successfully.<br>Find it on your home screen!</div>
+      <button class="imod-close" onclick="closeInstallModal()">🎮 Let's Play!</button>`;
+  } else {
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const steps = isIOS
+      ? ['Tap the <strong>Share</strong> button (box with arrow) in Safari','Scroll down and tap <strong>Add to Home Screen</strong>','Tap <strong>Add</strong> to confirm']
+      : ['Tap the <strong>Menu</strong> button (3 dots) in your browser','Select <strong>Add to Home Screen</strong> or <strong>Install App</strong>','Tap <strong>Install</strong> or <strong>Add</strong> to confirm'];
+    imodInner.innerHTML = `
+      <div class="imod-icon">📲</div>
+      <div class="imod-title">Install Bamboo Booper</div>
+      <div class="imod-msg">To install, follow these steps:</div>
+      <ul class="imod-steps">${steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+      <button class="imod-close" onclick="closeInstallModal()">Got it!</button>`;
+  }
+  installModal.classList.add('open');
+}
+
+function closeInstallModal(){
+  installModal.classList.remove('open');
+}
+installModal.addEventListener('click', e=>{ if(e.target===installModal) closeInstallModal(); });
+
+if(!isStandalone){
+  window.addEventListener('beforeinstallprompt', e=>{
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallButton(true);
+    if(!sessionStorage.getItem('bb_banner')){
+      setTimeout(()=>iBar.classList.add('show'), 4000);
+    }
+  });
+}
+
+mInstallBtn.addEventListener('click', async()=>{
+  vibe(30); SFX.btn();
+  if(deferredPrompt){
+    iBar.classList.remove('show');
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    showInstallButton(false);
+    if(outcome === 'accepted'){ showInstallModal('success'); }
+  } else {
+    showInstallModal('fallback');
+  }
+});
+
+document.getElementById('btn-install').addEventListener('click', async()=>{
+  if(!deferredPrompt) return;
+  iBar.classList.remove('show');
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  showInstallButton(false);
+  if(outcome === 'accepted') showInstallModal('success');
+});
+document.getElementById('btn-dismiss').addEventListener('click',()=>{
+  iBar.classList.remove('show');
+  sessionStorage.setItem('bb_banner','1');
+});
+
+window.addEventListener('appinstalled',()=>{
+  iBar.classList.remove('show');
+  showInstallButton(false);
+  deferredPrompt = null;
+  showInstallModal('success');
+});
+
+if(isStandalone) showInstallButton(false);
+
+// ═══════════════════════════════════════════════════════════
+//  LEADERBOARD SYSTEM  (Top 10, localStorage)
+// ═══════════════════════════════════════════════════════════
+const LB_KEY = 'bb_leaderboard';
+const LB_MAX = 10;
+
+function loadLeaderboard(){
+  try{ return JSON.parse(localStorage.getItem(LB_KEY)) || []; }
+  catch(e){ return []; }
+}
+
+function saveToLeaderboard(name, sc, lv, timeStr){
+  const entries = loadLeaderboard();
+  entries.push({
+    name: name || 'Player',
+    score: sc,
+    level: lv,
+    time: timeStr,
+    date: new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+  });
+  entries.sort((a,b) => b.score - a.score);
+  const trimmed = entries.slice(0, LB_MAX);
+  localStorage.setItem(LB_KEY, JSON.stringify(trimmed));
+  return trimmed;
+}
+
+function clearLeaderboard(){
+  localStorage.removeItem(LB_KEY);
+  renderLeaderboard();
+}
+
+function renderLeaderboard(){
+  const list = document.getElementById('lb-list');
+  if(!list) return;
+  const entries = loadLeaderboard();
+  if(entries.length === 0){
+    list.innerHTML = '<li class="lb-empty">🐼 No scores yet — play a game!</li>';
+    return;
+  }
+  const medals = ['🥇','🥈','🥉'];
+  list.innerHTML = entries.map((e,i) => `
+    <li class="lb-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}" style="animation-delay:${i*0.04}s">
+      <span class="lb-rank">${medals[i] || (i+1)}</span>
+      <div class="lb-info">
+        <div class="lb-name">${e.name}</div>
+        <div class="lb-meta">Lv ${e.level} · ${e.time || ''} · ${e.date}</div>
+      </div>
+      <span class="lb-score">${e.score}</span>
+    </li>`
+  ).join('');
+}
+
+document.getElementById('lb-clear-btn').addEventListener('click',()=>{
+  vibe(40);
+  if(confirm('Clear all leaderboard scores?')){ clearLeaderboard(); toast('Leaderboard cleared','info'); }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ACHIEVEMENTS SYSTEM  (5 medals, localStorage)
+// ═══════════════════════════════════════════════════════════
+const ACH_KEY = 'bb_achievements';
+
+const ACHIEVEMENTS = [
+  { id:'first_bamboo',  icon:'🎋', name:'First Bamboo',     desc:'Eat your first bamboo',          check: (s,c,lv)=> s >= 1  },
+  { id:'collector',     icon:'🌿', name:'Bamboo Collector', desc:'Eat 25 bamboo in one game',       check: (s,c,lv)=> s >= 25 },
+  { id:'combo_master',  icon:'🔥', name:'Combo Master',     desc:'Get a combo streak of 5 or more', check: (s,c,lv)=> c >= 5  },
+  { id:'speed_demon',   icon:'⚡', name:'Speed Demon',      desc:'Reach Level 5',                   check: (s,c,lv)=> lv >= 5 },
+  { id:'panda_master',  icon:'🐼', name:'Panda Master',     desc:'Score 50 bamboo',                 check: (s,c,lv)=> s >= 50 },
+];
+
+function loadAchievements(){
+  try{ return JSON.parse(localStorage.getItem(ACH_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+
+let _achToastTimer = null;
+function showAchToast(msg){
+  const el = document.getElementById('ach-toast');
+  if(!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(_achToastTimer);
+  _achToastTimer = setTimeout(()=> el.classList.remove('show'), 2800);
+}
+
+function checkAchievements(sc, combo, lv){
+  const unlocked = loadAchievements();
+  let newUnlocks = [];
+  ACHIEVEMENTS.forEach(a => {
+    if(!unlocked[a.id] && a.check(sc, combo, lv)){
+      unlocked[a.id] = true;
+      newUnlocks.push(a);
+    }
+  });
+  if(newUnlocks.length){
+    localStorage.setItem(ACH_KEY, JSON.stringify(unlocked));
+    // Show unlock toast for first new achievement
+    const a = newUnlocks[0];
+    setTimeout(()=> showAchToast(`${a.icon} Achievement Unlocked: ${a.name}!`), 600);
+    vibe([30,40,30]);
+  }
+}
+
+function renderAchievements(){
+  const grid = document.getElementById('ach-grid');
+  if(!grid) return;
+  const unlocked = loadAchievements();
+  grid.innerHTML = ACHIEVEMENTS.map((a,i) => {
+    const done = !!unlocked[a.id];
+    return `
+      <div class="ach-item ${done?'unlocked':'locked'}" style="animation-delay:${i*0.06}s">
+        <span class="ach-icon">${a.icon}</span>
+        <div class="ach-body">
+          <div class="ach-name">${a.name}</div>
+          <div class="ach-desc">${a.desc}</div>
+        </div>
+        <span class="ach-badge">${done?'✓ Done':'Locked'}</span>
+      </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+//  DAILY CHALLENGE SYSTEM
+// ═══════════════════════════════════════════════════════════
+const DC_DATE_KEY   = 'bb_dc_date';
+const DC_TARGET_KEY = 'bb_dc_target';
+const DC_DONE_KEY   = 'bb_dc_done';
+const DC_PROGRESS_KEY = 'bb_dc_progress';
+
+// Deterministic daily target from date seed (15–30 range)
+function getDailyTarget(){
+  const today = new Date().toDateString();
+  let seed = 0;
+  for(let c of today) seed += c.charCodeAt(0);
+  return 15 + (seed % 16); // 15–30
+}
+
+function initDailyChallenge(){
+  const today     = new Date().toDateString();
+  const savedDate = localStorage.getItem(DC_DATE_KEY);
+  if(savedDate !== today){
+    // New day — reset challenge
+    localStorage.setItem(DC_DATE_KEY,   today);
+    localStorage.setItem(DC_TARGET_KEY, getDailyTarget());
+    localStorage.setItem(DC_DONE_KEY,   'false');
+    localStorage.setItem(DC_PROGRESS_KEY, '0');
+  }
+  updateDailyChallengeUI();
+}
+
+function getDCTarget(){
+  return parseInt(localStorage.getItem(DC_TARGET_KEY) || '20');
+}
+function isDCDone(){
+  return localStorage.getItem(DC_DONE_KEY) === 'true';
+}
+function getDCProgress(){
+  return parseInt(localStorage.getItem(DC_PROGRESS_KEY) || '0');
+}
+
+function updateDailyChallengeUI(){
+  const card    = document.getElementById('daily-challenge-card');
+  const goalTxt = document.getElementById('dc-goal-text');
+  const subTxt  = document.getElementById('dc-sub-text');
+  const label   = document.getElementById('dc-label');
+  const fill    = document.getElementById('dc-fill');
+  if(!card) return;
+
+  const target   = getDCTarget();
+  const done     = isDCDone();
+  const progress = Math.min(getDCProgress(), target);
+  const pct      = Math.round((progress / target) * 100);
+
+  if(done){
+    card.classList.add('completed');
+    label.textContent    = '✅ Daily Challenge';
+    goalTxt.textContent  = 'Challenge Completed!';
+    subTxt.textContent   = `Score: ${progress} / ${target} · Resets tomorrow`;
+  } else {
+    card.classList.remove('completed');
+    label.textContent    = '🌿 Daily Challenge';
+    goalTxt.textContent  = `Score ${target} Bamboo Today!`;
+    subTxt.textContent   = `Progress: ${progress} / ${target}`;
+  }
+  fill.style.width = pct + '%';
+}
+
+let _dcCompletedThisGame = false;
+let _dcBannerTimer = null;
+
+function checkDailyChallenge(currentScore){
+  if(isDCDone() || _dcCompletedThisGame) return;
+
+  const target = getDCTarget();
+  // Save progress
+  localStorage.setItem(DC_PROGRESS_KEY, currentScore);
+
+  if(currentScore >= target){
+    // Mark complete
+    localStorage.setItem(DC_DONE_KEY, 'true');
+    _dcCompletedThisGame = true;
+
+    // Show banner
+    const banner = document.getElementById('dc-banner');
+    if(banner){
+      banner.classList.add('show');
+      clearTimeout(_dcBannerTimer);
+      _dcBannerTimer = setTimeout(()=> banner.classList.remove('show'), 3200);
+    }
+
+    // Unlock Daily Bamboo Master achievement
+    const unlocked = JSON.parse(localStorage.getItem(ACH_KEY) || '{}');
+    if(!unlocked['daily_master']){
+      unlocked['daily_master'] = true;
+      localStorage.setItem(ACH_KEY, JSON.stringify(unlocked));
+      setTimeout(()=> showAchToast('🏅 Achievement Unlocked: Daily Bamboo Master!'), 800);
+      vibe([30,50,30]);
+    }
+
+    updateDailyChallengeUI();
+    SFX.levelUp();
+  }
+}
+
+// Add daily_master to ACHIEVEMENTS array (append dynamically)
+ACHIEVEMENTS.push({
+  id:'daily_master', icon:'🏅', name:'Daily Bamboo Master',
+  desc:'Complete a Daily Challenge',
+  check: ()=> false // only unlocked via checkDailyChallenge
+});
+
+// ═══════════════════════════════════════════════════════════
+//  COMPETITION MODE — Challenge a Friend
+// ═══════════════════════════════════════════════════════════
+
+// Check URL for ?challenge=N on launch
+(function checkChallengeLink(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const target = parseInt(params.get('challenge'));
+    if(target > 0){
+      const bar = document.getElementById('challenge-link-bar');
+      const disp = document.getElementById('challenge-target-display');
+      if(bar){ bar.style.display='block'; }
+      if(disp){ disp.textContent = target; }
+      // Store so game can show it during play
+      sessionStorage.setItem('bb_challenge_target', target);
+    }
+  }catch(e){}
+})();
+
+async function challengeFriend(){
+  // Use origin so it works on both vercel and github pages
+  const challengeUrl = window.location.origin + '/?challenge=' + score;
+  // Put URL in text ONLY — never pass url: separately to navigator.share
+  // (some apps like WhatsApp append url again if both text+url are passed = duplicate)
+  const text = '\u{1F43C} I just scored ' + score + ' bamboo in Bamboo Booper!\n\nThink you can beat me? \u{1F33F}\n\n' + challengeUrl;
+  if(navigator.share){
+    try{
+      await navigator.share({ title:'Bamboo Booper Challenge \u{1F43C}', text });
+      return;
+    }catch(e){}
+  }
+  // Clipboard fallback
+  try{
+    await navigator.clipboard.writeText(text);
+    toast('Challenge link copied! \u{1F525}','ok', 2800);
+  }catch(e){
+    const el=document.createElement('textarea');
+    el.value=text; document.body.appendChild(el);
+    el.select(); document.execCommand('copy');
+    document.body.removeChild(el);
+    toast('Challenge link copied! \u{1F525}','ok', 2800);
+  }
+  // Track challenge shares
+  const shares = parseInt(localStorage.getItem('bb_challenge_shares')||'0') + 1;
+  localStorage.setItem('bb_challenge_shares', shares);
+}
+
+document.getElementById('gom-challenge').addEventListener('click',()=>{
+  vibe(30); SFX.btn(); challengeFriend();
+});
+
+// ═══════════════════════════════════════════════════════════
+//  SETTINGS — RESET BUTTONS (leaderboard + achievements)
+// ═══════════════════════════════════════════════════════════
+document.getElementById('btn-reset-lb').addEventListener('click',()=>{
+  vibe(50);
+  if(confirm('Clear all leaderboard scores?')){
+    clearLeaderboard(); toast('Leaderboard cleared','info');
+  }
+});
+document.getElementById('btn-reset-ach').addEventListener('click',()=>{
+  vibe(50);
+  if(confirm('Reset all achievements?')){
+    localStorage.removeItem(ACH_KEY);
+    toast('Achievements reset','info');
+    renderAchievements();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  OFFLINE / ONLINE TOAST
+// ═══════════════════════════════════════════════════════════
+window.addEventListener('offline',()=>toast('📵 Offline — game still works!','bad',3000));
+window.addEventListener('online', ()=>toast('✅ Back online!','ok',2500));
+</script>
+</body>
+</html>
