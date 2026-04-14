@@ -1,12 +1,8 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.codetech.bamboobooper",
-      "sha256_cert_fingerprints": [
-        "72:FC:5A:DB:EF:B7:55:28:87:85:55:9C:29:52:98:59:DC:4D:D4:EE:76:B3:6A:8A:2C:EB:C5:07:B6:64:26:C5"
-      ]
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.bamboo_booper.twa",
+        "sha256_cert_fingerprints": ["9D:64:A8:16:D4:C5:DE:44:1E:72:DF:24:39:52:BC:9A:B9:CF:B6:42:4E:BA:ED:07:81:FF:62:75:DD:5F:3C:4D"]
+      }
+    }]
