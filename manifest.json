@@ -1,9 +1,9 @@
 {
-  "name": "Bamboo Booper – Panda Arcade Adventure",
+  "name": "BambooBooper – Panda Arcade Adventure",
   "short_name": "Bamboo Booper",
   "description": "Guide your hungry panda through a bamboo forest in this fun snake-style arcade game! Eat bamboo, level up, unlock panda skins, and beat your high score!",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/index.html/",
+  "scope": "/index.html/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#071a0b",
