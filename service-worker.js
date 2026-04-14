@@ -1,31 +1,21 @@
 // ══════════════════════════════════════════════════════════════
-// BAMBOO BOOPER — Service Worker v14 (Full Offline / App Shell)
+// BAMBOO BOOPER — Service Worker v15
 // CodeTech · Lead Developer: Sachin Sheth
 // ══════════════════════════════════════════════════════════════
 //
-//  CRITICAL FIX: Chrome data-clear offline startup
-//
-//  Root cause: When Chrome data is cleared, the SW + all caches
-//  are wiped. On next launch the app needs network to re-cache.
-//  Solution: SW v14 uses a PRECACHE strategy — all game assets
-//  are embedded / self-contained in index.html (single file),
-//  so the ONLY asset that must load from network is index.html.
-//  Once it loads once, the full game is cached and offline forever.
-//
-//  Strategy:
-//   INSTALL  → cache CORE_ASSETS immediately → skipWaiting()
-//   ACTIVATE → delete old caches → clients.claim()
-//   FETCH    → navigate: ALWAYS try cache first, NEVER fail silently
-//              On cache miss → fetch+cache → serve
-//              On network error → emergencyPage (never blank)
+//  v15 improvements:
+//  - Faster install: parallel asset caching with allSettled
+//  - Better cache versioning: auto-purge on update
+//  - Network-first for HTML (always fresh on network, cached offline)
+//  - Cache-first for all static assets (CSS, icons, JS)
+//  - CDN stale-while-revalidate
+//  - Full reset support via CLEAR_ALL_CACHES message
 //
 // ══════════════════════════════════════════════════════════════
 
-const CACHE_NAME   = 'bamboo-booper-v14';
+const CACHE_NAME   = 'bamboo-booper-v15';
 const GAME_VERSION = '1.0';
 
-// Core assets — index.html is THE game (single-file PWA)
-// All JS is inlined, so caching index.html = caching the whole game
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -38,196 +28,142 @@ const CORE_ASSETS = [
 ];
 
 // ── INSTALL ────────────────────────────────────────────────────
-// Cache ALL core assets before the SW activates.
-// skipWaiting() ensures this SW takes control immediately —
-// no waiting for old tabs to close.
 self.addEventListener('install', event => {
-  console.log('[SW v14] Installing — caching app shell...');
-
+  console.log('[SW v15] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => {
-        // Cache everything — fail silently per asset so one
-        // bad CDN response doesn't abort the whole install
-        return Promise.allSettled(
+      .then(cache =>
+        Promise.allSettled(
           CORE_ASSETS.map(url =>
-            cache.add(url).catch(e => {
-              console.warn('[SW v14] Could not cache:', url, e.message);
-            })
+            cache.add(url).catch(e => console.warn('[SW v15] Skipped:', url))
           )
-        );
-      })
+        )
+      )
       .then(() => {
-        console.log('[SW v14] App shell cached. Activating immediately...');
+        console.log('[SW v15] Installed. Activating immediately...');
         return self.skipWaiting();
       })
   );
 });
 
 // ── ACTIVATE ───────────────────────────────────────────────────
-// Purge ALL old bamboo-booper caches.
-// clients.claim() makes this SW control existing pages right away —
-// critical so the first page load after data-clear is served by this SW.
 self.addEventListener('activate', event => {
-  console.log('[SW v14] Activating...');
-
+  console.log('[SW v15] Activating...');
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(
         keys
           .filter(k => k.startsWith('bamboo-booper-') && k !== CACHE_NAME)
-          .map(k => {
-            console.log('[SW v14] Purging old cache:', k);
-            return caches.delete(k);
-          })
+          .map(k => { console.log('[SW v15] Purging:', k); return caches.delete(k); })
       ))
       .then(() => self.clients.claim())
-      .then(() => console.log('[SW v14] Active — controlling all clients.'))
+      .then(() => console.log('[SW v15] Active.'))
   );
 });
 
 // ── FETCH ──────────────────────────────────────────────────────
 self.addEventListener('fetch', event => {
   const { request } = event;
-
-  // Only handle GET requests
   if (request.method !== 'GET') return;
-
-  // Only handle http/https (skip chrome-extension://, data:, etc.)
-  let reqUrl;
   try {
-    reqUrl = new URL(request.url);
-    if (!reqUrl.protocol.startsWith('http')) return;
+    const u = new URL(request.url);
+    if (!u.protocol.startsWith('http')) return;
   } catch { return; }
 
-  // ── NAVIGATION (page loads) ──────────────────────────────────
-  // This is THE critical path for offline startup after data clear.
-  // Strategy: Cache first → network+cache → emergency fallback
+  // ── HTML Navigation: network-first, cache fallback ──────────
+  // This ensures users always get fresh HTML when online,
+  // but the game still loads offline from cache
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.open(CACHE_NAME).then(async cache => {
-
-        // 1. Try cache first (instant offline load)
-        const cached = await cache.match('/index.html');
-        if (cached) {
-          console.log('[SW v14] Serving index.html from cache');
-          // Background refresh — update cache silently
-          fetch('/index.html', { cache: 'no-cache' })
-            .then(r => { if (r && r.ok) cache.put('/index.html', r); })
-            .catch(() => {});
-          return cached;
-        }
-
-        // 2. Cache miss — try network (first run or after data-clear)
-        console.log('[SW v14] Cache miss — fetching from network...');
-        try {
-          const response = await fetch(request, { cache: 'no-cache' });
+      fetch(request, { cache: 'no-cache' })
+        .then(response => {
           if (response && response.ok) {
-            // Cache it immediately for next offline use
-            await cache.put('/index.html', response.clone());
-            await cache.put('/', response.clone());
-            console.log('[SW v14] index.html fetched and cached');
+            // Cache fresh copy for offline use
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put('/index.html', response.clone());
+              cache.put(request, response.clone());
+            });
             return response;
           }
-        } catch (networkErr) {
-          console.warn('[SW v14] Network failed:', networkErr.message);
-        }
-
-        // 3. Both cache and network failed → show offline page
-        const offlinePage = await caches.match('/offline.html');
-        if (offlinePage) return offlinePage;
-        return emergencyPage();
-      })
+          throw new Error('Bad response');
+        })
+        .catch(async () => {
+          // Offline: serve from cache
+          const cached = await caches.match('/index.html');
+          if (cached) return cached;
+          const offline = await caches.match('/offline.html');
+          return offline || emergencyPage();
+        })
     );
     return;
   }
 
-  // ── CDN ASSETS (jsPDF, fonts) — stale-while-revalidate ───────
-  if (reqUrl.hostname.includes('cdnjs.cloudflare.com') ||
-      reqUrl.hostname.includes('fonts.google') ||
-      reqUrl.hostname.includes('fonts.gstatic')) {
+  // ── CDN (jsPDF etc): stale-while-revalidate ─────────────────
+  if (request.url.includes('cdnjs.cloudflare.com')) {
     event.respondWith(
       caches.open(CACHE_NAME).then(cache =>
         cache.match(request).then(cached => {
-          // Serve cached immediately, refresh in background
-          const networkFetch = fetch(request)
-            .then(r => { if (r && r.ok) cache.put(request, r.clone()); return r; })
+          const net = fetch(request)
+            .then(r => { if (r?.ok) cache.put(request, r.clone()); return r; })
             .catch(() => null);
-          return cached || networkFetch;
+          return cached || net;
         })
       )
     );
     return;
   }
 
-  // ── ALL OTHER ASSETS (icons, style.css, etc.) — cache first ──
+  // ── Static assets: cache-first ──────────────────────────────
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache =>
-      cache.match(request).then(cached => {
-        if (cached) return cached;
-        return fetch(request)
-          .then(r => {
-            if (r && r.ok && r.type !== 'opaque') {
-              cache.put(request, r.clone());
-            }
-            return r;
-          })
-          .catch(() => new Response('', {
-            status: 503,
-            statusText: 'Service Unavailable'
-          }));
-      })
-    )
+    caches.match(request).then(cached => {
+      if (cached) return cached;
+      return fetch(request).then(r => {
+        if (r?.ok && r.type !== 'opaque')
+          caches.open(CACHE_NAME).then(c => c.put(request, r.clone()));
+        return r;
+      }).catch(() => new Response('', { status: 503 }));
+    })
   );
 });
 
-// ── EMERGENCY FALLBACK PAGE ────────────────────────────────────
-// Shown ONLY when both cache AND network are unavailable.
-// Never shows a blank page.
+// ── Emergency fallback ─────────────────────────────────────────
 function emergencyPage() {
-  return new Response(`<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#071a0b"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;background:#071a0b;font-family:system-ui,sans-serif;
-  color:#fff;text-align:center;padding:28px}
-.p{font-size:88px;margin-bottom:16px;animation:bob 2s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-h1{font-size:22px;font-weight:900;color:#7eed9a;margin-bottom:10px}
-p{font-size:14px;color:rgba(255,255,255,.75);margin-bottom:8px;line-height:1.6}
-.hint{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:28px}
-button{padding:14px 36px;background:linear-gradient(135deg,#3dba5e,#2d8f48);
-  color:#fff;border:none;border-radius:28px;font-size:16px;font-weight:700;cursor:pointer;
-  box-shadow:0 6px 20px rgba(61,186,94,.4)}
-button:active{transform:scale(.95)}
-.footer{margin-top:32px;font-size:11px;color:rgba(255,255,255,.3)}
-</style>
-</head>
-<body>
-<div class="p">&#x1F43C;</div>
-<h1>Bamboo Booper</h1>
-<p>Please connect to internet once to load the game.</p>
-<p class="hint">After first load, the game works fully offline.</p>
-<button onclick="location.reload()">&#x1F504; Retry</button>
-<div class="footer">Bamboo Booper v1.0 &bull; CodeTech &bull; Lead Developer: Sachin Sheth</div>
-</body>
-</html>`,
-    { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+  return new Response(
+    '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
+    '<meta name="theme-color" content="#071a0b">' +
+    '<style>*{margin:0;padding:0}body{background:#071a0b;color:#fff;' +
+    'display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+    'min-height:100vh;font-family:system-ui;text-align:center;padding:24px}' +
+    'h1{color:#7eed9a;margin:16px 0 8px;font-size:20px}' +
+    'p{color:rgba(255,255,255,.7);font-size:14px;margin-bottom:24px}' +
+    'button{padding:14px 32px;background:#3dba5e;color:#fff;border:none;' +
+    'border-radius:28px;font-size:16px;font-weight:700;cursor:pointer}</style>' +
+    '</head><body><div style="font-size:72px">🐼</div>' +
+    '<h1>Bamboo Booper</h1>' +
+    '<p>Connect to internet once to load the game.<br>Then it works fully offline.</p>' +
+    '<button onclick="location.reload()">🔄 Retry</button>' +
+    '</body></html>',
+    { status: 200, headers: { 'Content-Type': 'text/html;charset=utf-8' } }
   );
 }
 
-// ── MESSAGE HANDLER ────────────────────────────────────────────
+// ── Message handler ────────────────────────────────────────────
 self.addEventListener('message', event => {
+  // Standard update trigger
   if (event.data?.type === 'SKIP_WAITING') {
-    console.log('[SW v14] SKIP_WAITING received.');
+    console.log('[SW v15] Activating now.');
     self.skipWaiting();
   }
+  // Full cache wipe — called by in-app Reset button
+  if (event.data?.type === 'CLEAR_ALL_CACHES') {
+    caches.keys()
+      .then(keys => Promise.all(keys.map(k => caches.delete(k))))
+      .then(() => {
+        console.log('[SW v15] All caches cleared by app request.');
+        event.ports[0]?.postMessage({ success: true });
+      });
+  }
   if (event.data?.type === 'GET_VERSION') {
-    event.ports[0]?.postMessage({ version: 'v14', cache: CACHE_NAME, game: GAME_VERSION });
+    event.ports[0]?.postMessage({ version: 'v15', cache: CACHE_NAME });
   }
 });

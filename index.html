@@ -8,6 +8,25 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Bamboo Booper"/>
 <meta name="theme-color" content="#071a0b"/>
+<!-- TWA: match status bar and nav bar exactly to prevent flash -->
+<meta name="msapplication-navbutton-color" content="#071a0b"/>
+<meta name="msapplication-TileColor" content="#071a0b"/>
+
+<!-- Preconnect to CDN for jsPDF — eliminates DNS delay -->
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>
+
+<!-- Critical CSS inlined via style tag below — no external CSS file needed -->
+<!-- Preload manifest for faster PWA install detection -->
+<link rel="preload" href="manifest.json" as="fetch" crossorigin/>
+<link rel="preload" href="icon-192.png" as="image"/>
+
+<!-- Inline critical dark background BEFORE anything renders — eliminates green flash -->
+<style>
+html,body{background:#071a0b !important;margin:0;padding:0}
+#boot{position:fixed;inset:0;background:#071a0b;z-index:99999;
+  display:flex;align-items:center;justify-content:center}
+</style>
 
 <!-- SEO -->
 <title>Bamboo Booper – Panda Arcade Adventure Game</title>
@@ -1172,6 +1191,10 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
       <button class="danger-btn" id="btn-reset-hi">🗑 Reset High Score</button>
       <button class="danger-btn" id="btn-reset-lb" style="margin-top:10px">🗑 Reset Leaderboard</button>
       <button class="danger-btn" id="btn-reset-ach" style="margin-top:10px">🗑 Reset Achievements</button>
+      <button class="danger-btn" id="btn-reset-all"
+        style="margin-top:14px;background:rgba(180,20,20,.2);border-color:rgba(220,40,40,.4);color:#ff8080">
+        ⚠️ Full Reset — Clear All App Data
+      </button>
     </div>
     <div class="card">
       <h3>📋 App Info</h3>
@@ -1868,6 +1891,55 @@ document.getElementById('btn-reset-hi').addEventListener('click',()=>{
     localStorage.removeItem('bb_hi');
     highscore=0; hs_hi.textContent=0; updateMenuHi();
     toast('High score reset!','info');
+  }
+});
+
+// ─── Full App Data Reset (Fix: Android "Clear Data" inconsistency) ───────────
+// This resets ALL data: localStorage, caches, SW registration
+// Solves the issue where Android Clear Data doesn't fully reset PWA state
+async function fullResetAppData(){
+  // 1. Clear all localStorage keys for this app
+  const keys = Object.keys(localStorage).filter(k => k.startsWith('bb_'));
+  keys.forEach(k => localStorage.removeItem(k));
+
+  // 2. Clear sessionStorage
+  sessionStorage.clear();
+
+  // 3. Tell SW to clear all its caches
+  try{
+    if(navigator.serviceWorker?.controller){
+      const channel = new MessageChannel();
+      navigator.serviceWorker.controller.postMessage(
+        { type: 'CLEAR_ALL_CACHES' }, [channel.port2]
+      );
+    }
+    // Also clear directly from app side
+    const cacheNames = await caches.keys();
+    await Promise.all(cacheNames.map(name => caches.delete(name)));
+    console.log('[Reset] All caches cleared');
+  }catch(e){ console.warn('[Reset] Cache clear error:', e); }
+
+  // 4. Unregister SW so it reinstalls fresh next launch
+  try{
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map(r => r.unregister()));
+    console.log('[Reset] SW unregistered');
+  }catch(e){}
+
+  // 5. Clear IndexedDB
+  try{
+    const dbs = await indexedDB.databases?.() || [];
+    await Promise.all(dbs.map(db => indexedDB.deleteDatabase(db.name)));
+  }catch(e){}
+
+  toast('✅ All data cleared — restarting…','ok', 2000);
+  setTimeout(()=> location.reload(true), 2100);
+}
+
+document.getElementById('btn-reset-all').addEventListener('click', async ()=>{
+  vibe(80);
+  if(confirm('⚠️ This will delete ALL game data:\n\n• High score\n• Leaderboard\n• Achievements\n• Daily challenge\n• Settings\n• All caches\n\nContinue?')){
+    await fullResetAppData();
   }
 });
 
@@ -2672,8 +2744,8 @@ window.addEventListener('load', () => {
 });
 
 // ═══════════════════════════════════════════════════════════
-//  SERVICE WORKER — v14 registration (Full Offline Fix)
-//  CRITICAL: Handles Chrome data-clear + offline startup
+//  SERVICE WORKER — v15 registration
+//  Fixes: browser bar, flash screen, data reset, cache stale
 // ═══════════════════════════════════════════════════════════
 (function registerSW() {
   if (!('serviceWorker' in navigator)) return;
@@ -2681,44 +2753,30 @@ window.addEventListener('load', () => {
   function doRegister() {
     navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
       .then(reg => {
-        console.log('[App] SW v14 registered:', reg.scope);
-
-        // Force-activate any waiting SW immediately
-        if (reg.waiting) {
-          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-        }
-
-        // Handle future SW updates
+        console.log('[App] SW v15 registered:', reg.scope);
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
         reg.addEventListener('updatefound', () => {
           const sw = reg.installing;
           if (!sw) return;
           sw.addEventListener('statechange', () => {
-            if (sw.state === 'installed') {
-              sw.postMessage({ type: 'SKIP_WAITING' });
-            }
+            if (sw.state === 'installed') sw.postMessage({ type: 'SKIP_WAITING' });
           });
         });
-
-        // When SW takes control, confirm cache is ready
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-          console.log('[App] SW now controlling page — offline ready.');
+          console.log('[App] SW controlling — offline ready.');
         });
       })
       .catch(err => {
-        console.warn('[App] SW registration failed, retrying in 3s:', err);
-        // Retry after 3 seconds — handles cases where SW file fails to load
+        console.warn('[App] SW registration failed, retry in 3s:', err);
         setTimeout(doRegister, 3000);
       });
   }
 
-  // Register immediately — don't wait for window load
-  // This is critical for PWA cold-start after data clear
   doRegister();
 
-  // CRITICAL: When internet comes back after data-clear,
-  // re-trigger SW registration to rebuild the cache
+  // Re-register when internet restored after data clear
   window.addEventListener('online', () => {
-    console.log('[App] Back online — ensuring SW/cache is fresh...');
+    console.log('[App] Online — refreshing SW...');
     doRegister();
   });
 })();
